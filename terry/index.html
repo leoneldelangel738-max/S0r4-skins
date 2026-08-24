@@ -1,1 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+
+  <title>Galería de Terry</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+
+    /* ========================================= */
+    /* CONTENEDOR PRINCIPAL */
+    /* ========================================= */
+
+    .carousel {
+      width: 100%;
+      margin: 0 auto;
+      padding: 4px;
+    }
+
+
+    /* ========================================= */
+    /* CONTADOR */
+    /* ========================================= */
+
+    #counter {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 4px 0 8px;
+      color: #222;
+    }
+
+
+    /* ========================================= */
+    /* VISUALIZADOR */
+    /* ========================================= */
+
+    .viewer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    /* ========================================= */
+    /* CONTENEDOR DE IMAGEN */
+    /* ========================================= */
+
+    .main-image-container {
+      width: 100%;
+      height: 68vh;
+      min-height: 380px;
+      max-height: 680px;
+
+      position: relative;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      overflow: hidden;
+
+      background: #111;
+
+      touch-action: none;
+    }
+
+
+    /* ========================================= */
+    /* IMAGEN PRINCIPAL */
+    /* ========================================= */
+
+    #mainImage {
+      max-width: 100%;
+      max-height: 100%;
+
+      width: auto;
+      height: auto;
+
+      object-fit: contain;
+
+      display: block;
+
+      user-select: none;
+      -webkit-user-drag: none;
+
+      transform-origin: center center;
+
+      transition: transform 0.15s ease;
+
+      will-change: transform;
+    }
+
+
+    /* ========================================= */
+    /* FLECHAS */
+    /* ========================================= */
+
+    .arrow {
+      position: absolute;
+
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      z-index: 20;
+
+      width: 46px;
+      height: 70px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: rgba(255,255,255,0.10);
+
+      color: rgba(255,255,255,0.95);
+
+      font-size: 58px;
+
+      line-height: 1;
+
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0;
+
+      text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+
+      transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+    }
+
+
+    #previousButton {
+      left: 2px;
+    }
+
+
+    #nextButton {
+      right: 2px;
+    }
+
+
+    .arrow:active {
+      transform:
+        translateY(-50%)
+        scale(0.85);
+
+      background: rgba(255,255,255,0.25);
+    }
+
+
+    /* ========================================= */
+    /* MINIATURAS */
+    /* ========================================= */
+
+    .thumbnails {
+      width: 100%;
+
+      display: flex;
+
+      gap: 8px;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      padding: 8px 4px 12px;
+
+      scroll-behavior: smooth;
+
+      -webkit-overflow-scrolling: touch;
+
+      scrollbar-width: thin;
+
+      touch-action: pan-x;
+    }
+
+
+    /* ========================================= */
+    /* TARJETA MINIATURA */
+    /* ========================================= */
+
+    .thumb {
+      min-width: 70px;
+      width: 70px;
+
+      padding: 4px;
+
+      background: #eeeeee;
+
+      border: 2px solid transparent;
+
+      border-radius: 6px;
+
+      cursor: pointer;
+
+      flex-shrink: 0;
+
+      transition:
+        transform 0.15s ease,
+        border 0.15s ease,
+        background 0.15s ease;
+    }
+
+
+    .thumb.active {
+      border-color: #333;
+      background: #ffffff;
+    }
+
+
+    .thumb:active {
+      transform: scale(0.94);
+    }
+
+
+    /* ========================================= */
+    /* IMAGEN MINIATURA */
+    /* ========================================= */
+
+    .thumb img {
+      width: 100%;
+      height: 90px;
+
+      object-fit: contain;
+
+      display: block;
+
+      pointer-events: none;
+    }
+
+
+    /* ========================================= */
+    /* NUMERO MINIATURA */
+    /* ========================================= */
+
+    .thumb-number {
+      width: 100%;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      margin-top: 4px;
+
+      color: #222;
+
+      pointer-events: none;
+    }
+
+
+    /* ========================================= */
+    /* MOVIL */
+    /* ========================================= */
+
+    @media (max-width: 400px) {
+
+      .carousel {
+        padding: 2px;
+      }
+
+      #counter {
+        font-size: 17px;
+      }
+
+      .main-image-container {
+        height: 65vh;
+        min-height: 340px;
+        max-height: 620px;
+      }
+
+      .arrow {
+        width: 42px;
+        height: 64px;
+        font-size: 52px;
+      }
+
+      .thumb {
+        min-width: 64px;
+        width: 64px;
+        padding: 3px;
+      }
+
+      .thumb img {
+        height: 82px;
+      }
+
+      .thumb-number {
+        font-size: 11px;
+      }
+
+    }
+
+
+    /* ========================================= */
+    /* PC */
+    /* ========================================= */
+
+    @media (min-width: 701px) {
+
+      .carousel {
+        max-width: 750px;
+        padding: 8px;
+      }
+
+      .main-image-container {
+        height: 72vh;
+        max-height: 720px;
+      }
+
+      .arrow {
+        width: 58px;
+        height: 80px;
+        font-size: 65px;
+      }
+
+      #previousButton {
+        left: 10px;
+      }
+
+      #nextButton {
+        right: 10px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <div class="carousel">
+
+    <div id="counter">
+      TERRY 01 / 48
+    </div>
+
+
+    <div class="viewer">
+
+      <div
+        class="main-image-container"
+        id="mainImageContainer"
+      >
+
+        <img
+          id="mainImage"
+          src=""
+          alt="Terry"
+          draggable="false"
+        >
+
+
+        <button
+          type="button"
+          class="arrow"
+          id="previousButton"
+          aria-label="Imagen anterior"
+        >
+          ‹
+        </button>
+
+
+        <button
+          type="button"
+          class="arrow"
+          id="nextButton"
+          aria-label="Imagen siguiente"
+        >
+          ›
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="thumbnails"
+      id="thumbnails"
+    ></div>
+
+  </div>
+
+
+
+  <script>
+
+    /* ========================================= */
+    /* LISTA DE IMAGENES DE TERRY */
+    /* ========================================= */
+
+    const images = [
+
+      ["01", "https://i.postimg.cc/GpTf0h0s/01.png"],
+      ["02", "https://i.postimg.cc/25Ltp8pZ/02.png"],
+      ["03", "https://i.postimg.cc/fbSP4T4S/03.png"],
+      ["04", "https://i.postimg.cc/k5RHrXr6/04.png"],
+      ["05", "https://i.postimg.cc/W4qyRbR9/05.png"],
+      ["06", "https://i.postimg.cc/NMhzQqYm/06.png"],
+      ["07", "https://i.postimg.cc/nL9W8c83/07.png"],
+      ["08", "https://i.postimg.cc/sXFN3dyp/08.png"],
+      ["09", "https://i.postimg.cc/LXdbmKRG/09.png"],
+      ["10", "https://i.postimg.cc/9M3nc5C5/10.png"],
+      ["11", "https://i.postimg.cc/hjF5KWcR/11.png"],
+      ["12", "https://i.postimg.cc/63smBJtX/12.png"],
+      ["13", "https://i.postimg.cc/vBWSBqZQ/13.png"],
+      ["14", "https://i.postimg.cc/FRjnRWHs/14.png"],
+      ["15", "https://i.postimg.cc/DZqYZjww/15.png"],
+      ["16", "https://i.postimg.cc/tThmTS4g/16.png"],
+      ["17", "https://i.postimg.cc/sXp0X6gQ/17.png"],
+      ["18", "https://i.postimg.cc/76gQ6sZJ/18.png"],
+      ["19", "https://i.postimg.cc/1tpYtC3q/19.png"],
+      ["20", "https://i.postimg.cc/vBWSBqZn/20.png"],
+      ["21", "https://i.postimg.cc/3NYfDXkN/21.png"],
+      ["22", "https://i.postimg.cc/QChYWQFV/22.png"],
+      ["23", "https://i.postimg.cc/T1fNWVKL/23.png"],
+      ["24", "https://i.postimg.cc/sxsHZYMB/24.png"],
+      ["25", "https://i.postimg.cc/prRcnfmQ/25.png"],
+      ["26", "https://i.postimg.cc/gjmt6VxD/26.png"],
+      ["27", "https://i.postimg.cc/Zn4sy8WL/27.jpg"],
+      ["28", "https://i.postimg.cc/FzNCJyYp/28.png"],
+      ["29", "https://i.postimg.cc/nrpSQ4XR/29.png"],
+      ["30", "https://i.postimg.cc/Hndv7wrN/30.png"],
+      ["31", "https://i.postimg.cc/BbpY5jFk/31.png"],
+      ["32", "https://i.postimg.cc/1XBC08Fb/32.png"],
+      ["33", "https://i.postimg.cc/XqLHKrFb/33.png"],
+      ["34", "https://i.postimg.cc/nr2RKX7H/34.png"],
+      ["35", "https://i.postimg.cc/SQfvbvPz/35.png"],
+      ["36", "https://i.postimg.cc/fWfrQrPd/36.png"],
+      ["37", "https://i.postimg.cc/dQjxcxfd/37.png"],
+      ["38", "https://i.postimg.cc/xj34V4Zv/38.png"],
+      ["39", "https://i.postimg.cc/ZYxMzMQj/39.png"],
+      ["40", "https://i.postimg.cc/tRNMGMcB/40.png"],
+      ["41", "https://i.postimg.cc/7PnWrWRR/41.png"],
+      ["42", "https://i.postimg.cc/qBx5H5YV/42.png"],
+      ["43", "https://i.postimg.cc/QxNn8qGL/43.png"],
+      ["44", "https://i.postimg.cc/3Jrb8Z5Q/44.png"],
+      ["45", "https://i.postimg.cc/vH8SYvFb/45.png"],
+      ["46", "https://i.postimg.cc/4N4Ff1kZ/46.png"],
+      ["47", "https://i.postimg.cc/WbpfN7Lq/47.png"],
+      ["48", "https://i.postimg.cc/02tXbJP2/48.png"]
+
+    ].map(function(item) {
+
+      return {
+        name: item[0],
+        url: item[1]
+      };
+
+    });
+
+
+    /* ========================================= */
+    /* ELEMENTOS */
+    /* ========================================= */
+
+    const mainImage =
+      document.getElementById("mainImage");
+
+    const mainImageContainer =
+      document.getElementById("mainImageContainer");
+
+    const counter =
+      document.getElementById("counter");
+
+    const previousButton =
+      document.getElementById("previousButton");
+
+    const nextButton =
+      document.getElementById("nextButton");
+
+    const thumbnails =
+      document.getElementById("thumbnails");
+
+
+    /* ========================================= */
+    /* INDICE */
+    /* ========================================= */
+
+    let currentIndex = 0;
+
+
+    /* ========================================= */
+    /* VARIABLES DE ZOOM */
+    /* ========================================= */
+
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+
+    const minScale = 1;
+    const maxScale = 4;
+
+
+    /* ========================================= */
+    /* VARIABLES TACTILES */
+    /* ========================================= */
+
+    let startX = 0;
+    let startY = 0;
+
+    let startTranslateX = 0;
+    let startTranslateY = 0;
+
+    let initialDistance = 0;
+    let initialScale = 1;
+
+    let isDragging = false;
+    let isPinching = false;
+
+
+    /* ========================================= */
+    /* APLICAR TRANSFORMACION */
+    /* ========================================= */
+
+    function updateTransform(animate = false) {
+
+      mainImage.style.transition =
+        animate
+          ? "transform 0.2s ease"
+          : "none";
+
+      mainImage.style.transform =
+        `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+    }
+
+
+    /* ========================================= */
+    /* RESETEAR ZOOM */
+    /* ========================================= */
+
+    function resetZoom() {
+
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+
+      updateTransform(true);
+
+    }
+
+
+    /* ========================================= */
+    /* LIMITAR MOVIMIENTO */
+    /* ========================================= */
+
+    function limitPosition() {
+
+      if (scale <= 1) {
+
+        translateX = 0;
+        translateY = 0;
+
+        return;
+
+      }
+
+
+      const containerWidth =
+        mainImageContainer.clientWidth;
+
+      const containerHeight =
+        mainImageContainer.clientHeight;
+
+      const imageWidth =
+        mainImage.offsetWidth;
+
+      const imageHeight =
+        mainImage.offsetHeight;
+
+      const scaledWidth =
+        imageWidth * scale;
+
+      const scaledHeight =
+        imageHeight * scale;
+
+      const maxX =
+        Math.max(
+          0,
+          (scaledWidth - containerWidth) / 2
+        );
+
+      const maxY =
+        Math.max(
+          0,
+          (scaledHeight - containerHeight) / 2
+        );
+
+
+      translateX =
+        Math.max(
+          -maxX,
+          Math.min(maxX, translateX)
+        );
+
+      translateY =
+        Math.max(
+          -maxY,
+          Math.min(maxY, translateY)
+        );
+
+    }
+
+
+    /* ========================================= */
+    /* DISTANCIA ENTRE DOS DEDOS */
+    /* ========================================= */
+
+    function getDistance(touch1, touch2) {
+
+      const x =
+        touch2.clientX -
+        touch1.clientX;
+
+      const y =
+        touch2.clientY -
+        touch1.clientY;
+
+      return Math.sqrt(
+        x * x +
+        y * y
+      );
+
+    }
+
+
+    /* ========================================= */
+    /* CREAR MINIATURAS */
+    /* ========================================= */
+
+    function createThumbnails() {
+
+      images.forEach(function(image, index) {
+
+        const thumb =
+          document.createElement("div");
+
+        thumb.className = "thumb";
+
+        thumb.dataset.index = index;
+
+
+        const imageElement =
+          document.createElement("img");
+
+        imageElement.src = image.url;
+
+        imageElement.alt =
+          "Terry " + image.name;
+
+
+        const number =
+          document.createElement("div");
+
+        number.className =
+          "thumb-number";
+
+        number.textContent =
+          image.name;
+
+
+        thumb.appendChild(imageElement);
+        thumb.appendChild(number);
+
+
+        thumb.addEventListener(
+          "click",
+          function() {
+
+            currentIndex = index;
+
+            updateCarousel();
+
+          }
+        );
+
+
+        thumbnails.appendChild(thumb);
+
+      });
+
+    }
+
+
+    /* ========================================= */
+    /* ACTUALIZAR CARRUSEL */
+    /* ========================================= */
+
+    function updateCarousel() {
+
+      const image =
+        images[currentIndex];
+
+
+      resetZoom();
+
+
+      mainImage.src =
+        image.url;
+
+
+      mainImage.alt =
+        "Terry " +
+        image.name;
+
+
+      counter.textContent =
+
+        "TERRY " +
+
+        String(
+          currentIndex + 1
+        ).padStart(2, "0")
+
+        +
+
+        " / " +
+
+        images.length;
+
+
+      const thumbs =
+        document.querySelectorAll(".thumb");
+
+
+      thumbs.forEach(function(thumb) {
+
+        thumb.classList.remove("active");
+
+      });
+
+
+      if (thumbs[currentIndex]) {
+
+        thumbs[currentIndex]
+          .classList
+          .add("active");
+
+
+        thumbs[currentIndex]
+          .scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "nearest",
+
+            inline: "center"
+
+          });
+
+      }
+
+    }
+
+
+    /* ========================================= */
+    /* SIGUIENTE */
+    /* ========================================= */
+
+    function nextImage() {
+
+      currentIndex++;
+
+      if (
+        currentIndex >= images.length
+      ) {
+
+        currentIndex = 0;
+
+      }
+
+      updateCarousel();
+
+    }
+
+
+    /* ========================================= */
+    /* ANTERIOR */
+    /* ========================================= */
+
+    function previousImage() {
+
+      currentIndex--;
+
+      if (
+        currentIndex < 0
+      ) {
+
+        currentIndex =
+          images.length - 1;
+
+      }
+
+      updateCarousel();
+
+    }
+
+
+    /* ========================================= */
+    /* BOTONES */
+    /* ========================================= */
+
+    nextButton.addEventListener(
+      "click",
+      nextImage
+    );
+
+
+    previousButton.addEventListener(
+      "click",
+      previousImage
+    );
+
+
+    /* ========================================= */
+    /* INICIO DEL TOQUE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchstart",
+
+      function(event) {
+
+        if (
+          event.touches.length === 2
+        ) {
+
+          isPinching = true;
+          isDragging = false;
+
+          initialDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+          initialScale = scale;
+
+          return;
+
+        }
+
+
+        if (
+          event.touches.length === 1
+        ) {
+
+          isDragging = true;
+          isPinching = false;
+
+          startX =
+            event.touches[0].clientX;
+
+          startY =
+            event.touches[0].clientY;
+
+          startTranslateX =
+            translateX;
+
+          startTranslateY =
+            translateY;
+
+        }
+
+      },
+
+      {
+        passive: false
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* MOVIMIENTO DE DEDOS */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchmove",
+
+      function(event) {
+
+        /* ZOOM CON DOS DEDOS */
+
+        if (
+          event.touches.length === 2
+        ) {
+
+          event.preventDefault();
+
+          isPinching = true;
+          isDragging = false;
+
+
+          const currentDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+
+          const zoomRatio =
+            currentDistance /
+            initialDistance;
+
+
+          scale =
+            initialScale *
+            zoomRatio;
+
+
+          scale =
+            Math.max(
+              minScale,
+              Math.min(
+                maxScale,
+                scale
+              )
+            );
+
+
+          limitPosition();
+
+          updateTransform();
+
+          return;
+
+        }
+
+
+        /* MOVER IMAGEN */
+
+        if (
+          event.touches.length === 1 &&
+          isDragging
+        ) {
+
+          const currentX =
+            event.touches[0].clientX;
+
+          const currentY =
+            event.touches[0].clientY;
+
+
+          const deltaX =
+            currentX - startX;
+
+          const deltaY =
+            currentY - startY;
+
+
+          if (
+            scale > 1
+          ) {
+
+            event.preventDefault();
+
+
+            translateX =
+              startTranslateX +
+              deltaX;
+
+
+            translateY =
+              startTranslateY +
+              deltaY;
+
+
+            limitPosition();
+
+            updateTransform();
+
+          }
+
+        }
+
+      },
+
+      {
+        passive: false
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* FINAL DEL TOQUE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchend",
+
+      function(event) {
+
+        if (
+          isPinching
+        ) {
+
+          if (
+            scale <= 1.02
+          ) {
+
+            resetZoom();
+
+          }
+
+          else {
+
+            limitPosition();
+
+            updateTransform(true);
+
+          }
+
+
+          if (
+            event.touches.length < 2
+          ) {
+
+            isPinching = false;
+
+          }
+
+        }
+
+
+        /* CAMBIO DE IMAGEN */
+
+        if (
+          event.changedTouches.length === 1 &&
+          scale <= 1.02 &&
+          !isPinching
+        ) {
+
+          const endX =
+            event.changedTouches[0].clientX;
+
+          const endY =
+            event.changedTouches[0].clientY;
+
+
+          const differenceX =
+            startX - endX;
+
+          const differenceY =
+            startY - endY;
+
+
+          if (
+
+            Math.abs(differenceX) >
+            Math.abs(differenceY)
+
+            &&
+
+            differenceX > 60
+
+          ) {
+
+            nextImage();
+
+          }
+
+
+          else if (
+
+            Math.abs(differenceX) >
+            Math.abs(differenceY)
+
+            &&
+
+            differenceX < -60
+
+          ) {
+
+            previousImage();
+
+          }
+
+        }
+
+
+        if (
+          event.touches.length === 0
+        ) {
+
+          isDragging = false;
+          isPinching = false;
+
+        }
+
+      },
+
+      {
+        passive: true
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* CANCELAR TOQUE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchcancel",
+
+      function() {
+
+        isDragging = false;
+        isPinching = false;
+
+      }
+    );
+
+
+    /* ========================================= */
+    /* ZOOM CON RUEDA DEL MOUSE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "wheel",
+
+      function(event) {
+
+        event.preventDefault();
+
+
+        if (
+          event.deltaY < 0
+        ) {
+
+          scale += 0.2;
+
+        }
+
+        else {
+
+          scale -= 0.2;
+
+        }
+
+
+        scale =
+          Math.max(
+            minScale,
+            Math.min(
+              maxScale,
+              scale
+            )
+          );
+
+
+        if (
+          scale <= 1
+        ) {
+
+          translateX = 0;
+          translateY = 0;
+
+        }
+
+
+        limitPosition();
+
+        updateTransform();
+
+      },
+
+      {
+        passive: false
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* DOBLE CLICK PARA RESET */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "dblclick",
+
+      function() {
+
+        resetZoom();
+
+      }
+    );
+
+
+    /* ========================================= */
+    /* TECLADO */
+    /* ========================================= */
+
+    document.addEventListener(
+      "keydown",
+
+      function(event) {
+
+        if (
+          event.key === "ArrowRight"
+        ) {
+
+          nextImage();
+
+        }
+
+
+        if (
+          event.key === "ArrowLeft"
+        ) {
+
+          previousImage();
+
+        }
+
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          resetZoom();
+
+        }
+
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* INICIAR */
+    /* ========================================= */
+
+    createThumbnails();
+
+    updateCarousel();
+
+  </script>
+
+</body>
+</html>
