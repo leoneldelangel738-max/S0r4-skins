@@ -1,11 +1,15 @@
-
 <!DOCTYPE html>
-<html>
-<head>
-  <base target="_top">
+<html lang="es">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+  <title>Skin Viewer</title>
 
   <style>
 
@@ -20,7 +24,7 @@
       padding: 0;
       width: 100%;
       min-height: 100%;
-      background: transparent;
+      background: #f5f5f5;
       font-family: Arial, sans-serif;
     }
 
@@ -28,6 +32,10 @@
       overflow-x: hidden;
       touch-action: manipulation;
     }
+
+    /* =========================
+       VISOR
+    ========================== */
 
     .viewer {
 
@@ -41,6 +49,7 @@
       padding: 10px 0 15px 0;
 
     }
+
 
     /* =========================
        CONTADOR
@@ -61,7 +70,7 @@
 
 
     /* =========================
-       CONTENEDOR IMAGEN
+       CONTENEDOR PRINCIPAL
     ========================== */
 
     .image-container {
@@ -92,10 +101,25 @@
 
     #mainImage {
 
-      width: 100%;
-      height: 100%;
+      /*
+        IMPORTANTE:
+
+        width y height en auto evita
+        forzar la imagen a ampliarse.
+
+        Solo se reduce si no cabe
+        dentro del contenedor.
+      */
+
+      width: auto;
+      height: auto;
+
+      max-width: 100%;
+      max-height: 100%;
 
       object-fit: contain;
+
+      display: block;
 
       user-select: none;
 
@@ -113,7 +137,7 @@
 
 
     /* =========================
-       FLECHAS SOBRE IMAGEN
+       FLECHAS
     ========================== */
 
     .nav-button {
@@ -131,7 +155,7 @@
 
       border-radius: 50%;
 
-      background: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.80);
 
       color: #222;
 
@@ -169,7 +193,7 @@
 
     .nav-button:hover {
 
-      background: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.98);
 
     }
 
@@ -216,7 +240,6 @@
       overflow-x: auto;
 
       padding:
-
         5px
         10px
         15px
@@ -230,6 +253,10 @@
 
     }
 
+
+    /* =========================
+       MINIATURAS
+    ========================== */
 
     .thumbnail {
 
@@ -336,7 +363,7 @@
 
         font-size: 38px;
 
-        background: rgba(255,255,255,0.55);
+        background: rgba(255,255,255,0.65);
 
       }
 
@@ -409,6 +436,7 @@
 
 <body>
 
+
   <div class="viewer">
 
 
@@ -444,7 +472,8 @@
       <img
         id="mainImage"
         src=""
-        draggable="false">
+        draggable="false"
+        alt="Skin">
 
 
       <button
@@ -478,600 +507,581 @@
 
 
 
-<script>
-
-
-/* =========================================
-   LISTA DE IMÁGENES
-========================================= */
-
-const images = [
-
-  "https://i.postimg.cc/njfw8s8R/01.png",
-  "https://i.postimg.cc/mzW6xcxm/02.png",
-  "https://i.postimg.cc/N9vPhyhN/03.png",
-  "https://i.postimg.cc/FdXntftn/04.png",
-  "https://i.postimg.cc/p52GTgLx/05.png",
-  "https://i.postimg.cc/ZvT7R15R/06.png",
-  "https://i.postimg.cc/m1bXD0g2/07.png",
-  "https://i.postimg.cc/tnXSTL4n/08.png",
-  "https://i.postimg.cc/6Tw1YGfp/09.png",
-  "https://i.postimg.cc/9zVNJqYD/10.png",
-
-  "https://i.postimg.cc/Rq9bXnL6/11.png",
-  "https://i.postimg.cc/nMZw0QGQ/12.png",
-  "https://i.postimg.cc/xc1pSDZs/13.png",
-  "https://i.postimg.cc/jLS3r01g/14.png",
-  "https://i.postimg.cc/ppLctbSS/15.png",
-  "https://i.postimg.cc/JGzYWVgM/16.png",
-  "https://i.postimg.cc/JGY6rYVh/17.png",
-  "https://i.postimg.cc/WhYWNYLt/18.png",
-  "https://i.postimg.cc/3dfS8f5d/19.png",
-  "https://i.postimg.cc/Xp1Hj1SF/20.png",
-
-  "https://i.postimg.cc/yDJfkhs9/21.png",
-  "https://i.postimg.cc/4YK8mvs6/22.png",
-  "https://i.postimg.cc/87FyjdNm/23.png",
-  "https://i.postimg.cc/pm90pQRG/24.png",
-  "https://i.postimg.cc/5XZsvH2r/25.png",
-  "https://i.postimg.cc/FY2TcfHq/26.png",
-  "https://i.postimg.cc/yDwL9JNz/27.png",
-  "https://i.postimg.cc/4YrWtK3N/28.png",
-  "https://i.postimg.cc/jWPZhsW2/29.png",
-  "https://i.postimg.cc/p9zqB29m/30.png",
-
-  "https://i.postimg.cc/p9zqB29n/31.png",
-  "https://i.postimg.cc/1gwJK9g6/32.png",
-  "https://i.postimg.cc/Vrw4G3MD/33.png",
-  "https://i.postimg.cc/DJh5jtsH/34.png",
-  "https://i.postimg.cc/5YJp7ZLd/35.png",
-  "https://i.postimg.cc/HctzfB4P/36.png",
-  "https://i.postimg.cc/Kk5fdJDv/37.png",
-  "https://i.postimg.cc/r09jvQNs/38.png",
-  "https://i.postimg.cc/H8szHX6p/39.png",
-  "https://i.postimg.cc/T5Y0Ggt3/40.png",
+  <script>
+
+
+    /* =========================================
+       LISTA DE IMÁGENES
+    ========================================= */
+
+    const images = [
+
+      "https://i.postimg.cc/njfw8s8R/01.png",
+      "https://i.postimg.cc/mzW6xcxm/02.png",
+      "https://i.postimg.cc/N9vPhyhN/03.png",
+      "https://i.postimg.cc/FdXntftn/04.png",
+      "https://i.postimg.cc/p52GTgLx/05.png",
+      "https://i.postimg.cc/ZvT7R15R/06.png",
+      "https://i.postimg.cc/m1bXD0g2/07.png",
+      "https://i.postimg.cc/tnXSTL4n/08.png",
+      "https://i.postimg.cc/6Tw1YGfp/09.png",
+      "https://i.postimg.cc/9zVNJqYD/10.png",
+
+      "https://i.postimg.cc/Rq9bXnL6/11.png",
+      "https://i.postimg.cc/nMZw0QGQ/12.png",
+      "https://i.postimg.cc/xc1pSDZs/13.png",
+      "https://i.postimg.cc/jLS3r01g/14.png",
+      "https://i.postimg.cc/ppLctbSS/15.png",
+      "https://i.postimg.cc/JGzYWVgM/16.png",
+      "https://i.postimg.cc/JGY6rYVh/17.png",
+      "https://i.postimg.cc/WhYWNYLt/18.png",
+      "https://i.postimg.cc/3dfS8f5d/19.png",
+      "https://i.postimg.cc/Xp1Hj1SF/20.png",
+
+      "https://i.postimg.cc/yDJfkhs9/21.png",
+      "https://i.postimg.cc/4YK8mvs6/22.png",
+      "https://i.postimg.cc/87FyjdNm/23.png",
+      "https://i.postimg.cc/pm90pQRG/24.png",
+      "https://i.postimg.cc/5XZsvH2r/25.png",
+      "https://i.postimg.cc/FY2TcfHq/26.png",
+      "https://i.postimg.cc/yDwL9JNz/27.png",
+      "https://i.postimg.cc/4YrWtK3N/28.png",
+      "https://i.postimg.cc/jWPZhsW2/29.png",
+      "https://i.postimg.cc/p9zqB29m/30.png",
 
-  "https://i.postimg.cc/XB7L3dsL/41.png",
-  "https://i.postimg.cc/K3vfFB0J/42.png",
-  "https://i.postimg.cc/kDnfxP7m/43.png",
-  "https://i.postimg.cc/yWvnjpNJ/44.png",
-  "https://i.postimg.cc/RqXGdp0K/45.png",
-  "https://i.postimg.cc/D806MQW6/46.png",
-  "https://i.postimg.cc/RNhdD13G/47.png",
-  "https://i.postimg.cc/56rgdHL0/48.png",
-  "https://i.postimg.cc/xcZ5DkM8/49.png",
-  "https://i.postimg.cc/RWnRMMLL/50.png",
+      "https://i.postimg.cc/p9zqB29n/31.png",
+      "https://i.postimg.cc/1gwJK9g6/32.png",
+      "https://i.postimg.cc/Vrw4G3MD/33.png",
+      "https://i.postimg.cc/DJh5jtsH/34.png",
+      "https://i.postimg.cc/5YJp7ZLd/35.png",
+      "https://i.postimg.cc/HctzfB4P/36.png",
+      "https://i.postimg.cc/Kk5fdJDv/37.png",
+      "https://i.postimg.cc/r09jvQNs/38.png",
+      "https://i.postimg.cc/H8szHX6p/39.png",
+      "https://i.postimg.cc/T5Y0Ggt3/40.png",
 
-  "https://i.postimg.cc/G4sQccxz/51.png",
-  "https://i.postimg.cc/B89Cbdmr/52.png",
-  "https://i.postimg.cc/Mc2YHhsn/53.png",
-  "https://i.postimg.cc/67rfvYSv/54.png",
-  "https://i.postimg.cc/PLWQw2cz/55.png",
-  "https://i.postimg.cc/CZGsqmtN/56.png",
-  "https://i.postimg.cc/XGncc9SH/57.png",
-  "https://i.postimg.cc/Fdhgg0Xt/58.png",
-  "https://i.postimg.cc/5Yfqq8WV/59.png",
-  "https://i.postimg.cc/5Yfqq8Wb/60.png",
+      "https://i.postimg.cc/XB7L3dsL/41.png",
+      "https://i.postimg.cc/K3vfFB0J/42.png",
+      "https://i.postimg.cc/kDnfxP7m/43.png",
+      "https://i.postimg.cc/yWvnjpNJ/44.png",
+      "https://i.postimg.cc/RqXGdp0K/45.png",
+      "https://i.postimg.cc/D806MQW6/46.png",
+      "https://i.postimg.cc/RNhdD13G/47.png",
+      "https://i.postimg.cc/56rgdHL0/48.png",
+      "https://i.postimg.cc/xcZ5DkM8/49.png",
+      "https://i.postimg.cc/RWnRMMLL/50.png",
 
-  "https://i.postimg.cc/MfT7gxGX/61.png",
-  "https://i.postimg.cc/BP6TRsvK/62.png",
-  "https://i.postimg.cc/MfT7gxG1/63.png",
-  "https://i.postimg.cc/xNCvBYdv/64.png"
+      "https://i.postimg.cc/G4sQccxz/51.png",
+      "https://i.postimg.cc/B89Cbdmr/52.png",
+      "https://i.postimg.cc/Mc2YHhsn/53.png",
+      "https://i.postimg.cc/67rfvYSv/54.png",
+      "https://i.postimg.cc/PLWQw2cz/55.png",
+      "https://i.postimg.cc/CZGsqmtN/56.png",
+      "https://i.postimg.cc/XGncc9SH/57.png",
+      "https://i.postimg.cc/Fdhgg0Xt/58.png",
+      "https://i.postimg.cc/5Yfqq8WV/59.png",
+      "https://i.postimg.cc/5Yfqq8Wb/60.png",
 
-];
+      "https://i.postimg.cc/MfT7gxGX/61.png",
+      "https://i.postimg.cc/BP6TRsvK/62.png",
+      "https://i.postimg.cc/MfT7gxG1/63.png",
+      "https://i.postimg.cc/xNCvBYdv/64.png"
 
+    ];
 
-/* =========================================
-   VARIABLES
-========================================= */
 
-let currentIndex = 0;
 
-const mainImage =
-  document.getElementById("mainImage");
+    /* =========================================
+       VARIABLES
+    ========================================= */
 
-const carousel =
-  document.getElementById("carousel");
+    let currentIndex = 0;
 
-const counter =
-  document.getElementById("counter");
+    const mainImage =
+      document.getElementById("mainImage");
 
-const prevButton =
-  document.getElementById("prev");
+    const carousel =
+      document.getElementById("carousel");
 
-const nextButton =
-  document.getElementById("next");
+    const counter =
+      document.getElementById("counter");
 
-const imageContainer =
-  document.getElementById("imageContainer");
+    const prevButton =
+      document.getElementById("prev");
 
+    const nextButton =
+      document.getElementById("next");
 
-/* =========================================
-   BLOQUEAR MENÚ CONTEXTUAL
-========================================= */
+    const imageContainer =
+      document.getElementById("imageContainer");
 
-document.addEventListener(
-  "contextmenu",
-  function(event) {
 
-    event.preventDefault();
 
-  }
-);
+    /* =========================================
+       CREAR MINIATURAS
+    ========================================= */
 
+    images.forEach(function(url, index) {
 
-/* =========================================
-   CREAR MINIATURAS
-========================================= */
+      const thumb =
+        document.createElement("div");
 
-images.forEach(function(url, index) {
+      thumb.className =
+        "thumbnail";
 
-  const thumb =
-    document.createElement("div");
+      thumb.dataset.index =
+        index;
 
-  thumb.className =
-    "thumbnail";
 
-  thumb.dataset.index =
-    index;
+      const image =
+        document.createElement("img");
 
+      image.src =
+        url;
 
-  const image =
-    document.createElement("img");
+      image.draggable =
+        false;
 
-  image.src =
-    url;
 
-  image.draggable =
-    false;
+      thumb.appendChild(image);
 
 
-  thumb.appendChild(image);
+      thumb.addEventListener(
+        "click",
+        function() {
 
+          showImage(index);
 
-  thumb.addEventListener(
-    "click",
-    function() {
+        }
+      );
 
-      showImage(index);
 
-    }
-  );
-
-
-  carousel.appendChild(thumb);
-
-});
-
-
-/* =========================================
-   MOSTRAR IMAGEN
-========================================= */
-
-function showImage(index) {
-
-  if (index < 0) {
-
-    index =
-      images.length - 1;
-
-  }
-
-
-  if (index >= images.length) {
-
-    index =
-      0;
-
-  }
-
-
-  currentIndex =
-    index;
-
-
-  mainImage.src =
-    images[currentIndex];
-
-
-  const number =
-    String(currentIndex + 1)
-      .padStart(2, "0");
-
-
-  counter.textContent =
-    "SKIN " +
-    number +
-    " / " +
-    images.length;
-
-
-  document
-    .querySelectorAll(".thumbnail")
-    .forEach(function(thumb) {
-
-      thumb.classList
-        .remove("active");
+      carousel.appendChild(thumb);
 
     });
 
 
-  const activeThumbnail =
-    document.querySelector(
-      '.thumbnail[data-index="' +
-      currentIndex +
-      '"]'
-    );
 
+    /* =========================================
+       MOSTRAR IMAGEN
+    ========================================= */
 
-  if (activeThumbnail) {
+    function showImage(index) {
 
-    activeThumbnail
-      .classList
-      .add("active");
+      if (index < 0) {
 
+        index =
+          images.length - 1;
 
-    activeThumbnail
-      .scrollIntoView({
+      }
 
-        behavior: "smooth",
 
-        block: "nearest",
+      if (index >= images.length) {
 
-        inline: "center"
+        index =
+          0;
 
-      });
+      }
 
-  }
 
+      currentIndex =
+        index;
 
-  resetZoom();
 
-}
+      mainImage.src =
+        images[currentIndex];
 
 
-/* =========================================
-   BOTONES
-========================================= */
+      const number =
+        String(currentIndex + 1)
+          .padStart(2, "0");
 
-prevButton.addEventListener(
-  "click",
-  function() {
 
-    showImage(
-      currentIndex - 1
-    );
+      counter.textContent =
+        "SKIN " +
+        number +
+        " / " +
+        images.length;
 
-  }
-);
 
+      document
+        .querySelectorAll(".thumbnail")
+        .forEach(function(thumb) {
 
-nextButton.addEventListener(
-  "click",
-  function() {
+          thumb.classList
+            .remove("active");
 
-    showImage(
-      currentIndex + 1
-    );
+        });
 
-  }
-);
 
-
-/* =========================================
-   NAVEGACIÓN CON TECLADO
-========================================= */
-
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key ===
-      "ArrowLeft"
-    ) {
-
-      showImage(
-        currentIndex - 1
-      );
-
-    }
-
-
-    if (
-      event.key ===
-      "ArrowRight"
-    ) {
-
-      showImage(
-        currentIndex + 1
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================
-   SWIPE EN MÓVIL
-========================================= */
-
-let startX = 0;
-let endX = 0;
-
-
-imageContainer.addEventListener(
-  "touchstart",
-  function(event) {
-
-    if (
-      event.touches.length === 1
-    ) {
-
-      startX =
-        event.touches[0].clientX;
-
-    }
-
-  },
-  {
-    passive: true
-  }
-);
-
-
-imageContainer.addEventListener(
-  "touchend",
-  function(event) {
-
-    if (
-      event.changedTouches.length === 1
-    ) {
-
-      endX =
-        event.changedTouches[0].clientX;
-
-
-      handleSwipe();
-
-    }
-
-  },
-  {
-    passive: true
-  }
-);
-
-
-function handleSwipe() {
-
-  const difference =
-    startX - endX;
-
-
-  if (
-    Math.abs(difference) <
-    50
-  ) {
-
-    return;
-
-  }
-
-
-  if (
-    difference > 0
-  ) {
-
-    showImage(
-      currentIndex + 1
-    );
-
-  }
-  else {
-
-    showImage(
-      currentIndex - 1
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   ZOOM
-========================================= */
-
-let scale = 1;
-
-
-function resetZoom() {
-
-  scale = 1;
-
-  mainImage.style.transform =
-    "scale(1)";
-
-}
-
-
-imageContainer.addEventListener(
-  "wheel",
-  function(event) {
-
-    event.preventDefault();
-
-
-    if (
-      event.deltaY < 0
-    ) {
-
-      scale += 0.1;
-
-    }
-    else {
-
-      scale -= 0.1;
-
-    }
-
-
-    scale =
-      Math.max(
-        1,
-        Math.min(
-          scale,
-          3
-        )
-      );
-
-
-    mainImage.style.transform =
-      "scale(" +
-      scale +
-      ")";
-
-  },
-  {
-    passive: false
-  }
-);
-
-
-/* =========================================
-   ZOOM PINCH MÓVIL
-========================================= */
-
-let initialDistance = null;
-let initialScale = 1;
-
-
-imageContainer.addEventListener(
-  "touchstart",
-  function(event) {
-
-    if (
-      event.touches.length === 2
-    ) {
-
-      initialDistance =
-        getDistance(
-          event.touches[0],
-          event.touches[1]
+      const activeThumbnail =
+        document.querySelector(
+          '.thumbnail[data-index="' +
+          currentIndex +
+          '"]'
         );
 
 
-      initialScale =
-        scale;
+      if (activeThumbnail) {
+
+        activeThumbnail
+          .classList
+          .add("active");
+
+
+        activeThumbnail
+          .scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "nearest",
+
+            inline: "center"
+
+          });
+
+      }
+
+
+      resetZoom();
 
     }
 
-  },
-  {
-    passive: false
-  }
-);
 
 
-imageContainer.addEventListener(
-  "touchmove",
-  function(event) {
+    /* =========================================
+       BOTONES
+    ========================================= */
 
-    if (
-      event.touches.length === 2 &&
-      initialDistance
-    ) {
+    prevButton.addEventListener(
+      "click",
+      function() {
 
-      event.preventDefault();
-
-
-      const newDistance =
-        getDistance(
-          event.touches[0],
-          event.touches[1]
+        showImage(
+          currentIndex - 1
         );
 
-
-      const ratio =
-        newDistance /
-        initialDistance;
+      }
+    );
 
 
-      scale =
-        initialScale *
-        ratio;
+    nextButton.addEventListener(
+      "click",
+      function() {
 
-
-      scale =
-        Math.max(
-          1,
-          Math.min(
-            scale,
-            3
-          )
+        showImage(
+          currentIndex + 1
         );
 
+      }
+    );
+
+
+
+    /* =========================================
+       TECLADO
+    ========================================= */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "ArrowLeft") {
+
+          showImage(
+            currentIndex - 1
+          );
+
+        }
+
+
+        if (event.key === "ArrowRight") {
+
+          showImage(
+            currentIndex + 1
+          );
+
+        }
+
+      }
+    );
+
+
+
+    /* =========================================
+       SWIPE MÓVIL
+    ========================================= */
+
+    let startX = 0;
+    let endX = 0;
+
+
+    imageContainer.addEventListener(
+      "touchstart",
+      function(event) {
+
+        if (event.touches.length === 1) {
+
+          startX =
+            event.touches[0].clientX;
+
+        }
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    imageContainer.addEventListener(
+      "touchend",
+      function(event) {
+
+        if (event.changedTouches.length === 1) {
+
+          endX =
+            event.changedTouches[0].clientX;
+
+
+          handleSwipe();
+
+        }
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    function handleSwipe() {
+
+      const difference =
+        startX - endX;
+
+
+      if (
+        Math.abs(difference) < 50
+      ) {
+
+        return;
+
+      }
+
+
+      if (difference > 0) {
+
+        showImage(
+          currentIndex + 1
+        );
+
+      }
+      else {
+
+        showImage(
+          currentIndex - 1
+        );
+
+      }
+
+    }
+
+
+
+    /* =========================================
+       ZOOM CON RUEDA
+    ========================================= */
+
+    let scale = 1;
+
+
+    function resetZoom() {
+
+      scale = 1;
 
       mainImage.style.transform =
-        "scale(" +
-        scale +
-        ")";
+        "scale(1)";
 
     }
 
-  },
-  {
-    passive: false
-  }
-);
+
+    imageContainer.addEventListener(
+      "wheel",
+      function(event) {
+
+        event.preventDefault();
 
 
-imageContainer.addEventListener(
-  "touchend",
-  function() {
+        if (event.deltaY < 0) {
 
-    initialDistance =
-      null;
+          scale += 0.1;
 
-  }
-);
+        }
+        else {
 
+          scale -= 0.1;
 
-function getDistance(
-  touch1,
-  touch2
-) {
-
-  const x =
-    touch2.clientX -
-    touch1.clientX;
-
-  const y =
-    touch2.clientY -
-    touch1.clientY;
+        }
 
 
-  return Math.sqrt(
-
-    x * x +
-
-    y * y
-
-  );
-
-}
-
-
-/* =========================================
-   INICIAR
-========================================= */
-
-showImage(0);
+        scale =
+          Math.max(
+            1,
+            Math.min(
+              scale,
+              3
+            )
+          );
 
 
-</script>
+        mainImage.style.transform =
+          "scale(" +
+          scale +
+          ")";
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+
+    /* =========================================
+       ZOOM PINCH MÓVIL
+    ========================================= */
+
+    let initialDistance = null;
+    let initialScale = 1;
+
+
+    imageContainer.addEventListener(
+      "touchstart",
+      function(event) {
+
+        if (event.touches.length === 2) {
+
+          initialDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+
+          initialScale =
+            scale;
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    imageContainer.addEventListener(
+      "touchmove",
+      function(event) {
+
+        if (
+          event.touches.length === 2 &&
+          initialDistance
+        ) {
+
+          event.preventDefault();
+
+
+          const newDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+
+          const ratio =
+            newDistance /
+            initialDistance;
+
+
+          scale =
+            initialScale *
+            ratio;
+
+
+          scale =
+            Math.max(
+              1,
+              Math.min(
+                scale,
+                3
+              )
+            );
+
+
+          mainImage.style.transform =
+            "scale(" +
+            scale +
+            ")";
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    imageContainer.addEventListener(
+      "touchend",
+      function() {
+
+        initialDistance =
+          null;
+
+      }
+    );
+
+
+    function getDistance(
+      touch1,
+      touch2
+    ) {
+
+      const x =
+        touch2.clientX -
+        touch1.clientX;
+
+
+      const y =
+        touch2.clientY -
+        touch1.clientY;
+
+
+      return Math.sqrt(
+
+        x * x +
+
+        y * y
+
+      );
+
+    }
+
+
+
+    /* =========================================
+       INICIAR
+    ========================================= */
+
+    showImage(0);
+
+
+  </script>
+
 
 </body>
+
 </html>
