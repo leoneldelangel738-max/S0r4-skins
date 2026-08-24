@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -11,10 +12,6 @@
   <title>Visualizador de Skins</title>
 
   <style>
-
-    /* ========================================= */
-    /* CONFIGURACION GENERAL - MOBILE FIRST */
-    /* ========================================= */
 
     * {
       box-sizing: border-box;
@@ -30,15 +27,9 @@
     }
 
     body {
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      font-family: Arial, Helvetica, sans-serif;
       background: #f5f5f5;
-
       text-align: center;
-
       overflow-x: hidden;
     }
 
@@ -79,10 +70,11 @@
 
 
     /* ========================================= */
-    /* ZONA PRINCIPAL DE LA IMAGEN */
+    /* CONTENEDOR DE IMAGEN */
     /* ========================================= */
 
     .main-image-container {
+
       width: 100%;
 
       height: 68vh;
@@ -97,7 +89,10 @@
 
       overflow: hidden;
 
-      touch-action: pan-y;
+      background: #111;
+
+      touch-action: none;
+
     }
 
 
@@ -106,8 +101,12 @@
     /* ========================================= */
 
     #mainImage {
-      width: 100%;
-      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      width: auto;
+      height: auto;
 
       object-fit: contain;
 
@@ -115,19 +114,29 @@
 
       user-select: none;
       -webkit-user-drag: none;
+
+      transform-origin: center center;
+
+      transition:
+        transform 0.15s ease;
+
+      will-change: transform;
+
     }
 
 
     /* ========================================= */
-    /* FLECHAS SOBRE LA IMAGEN */
+    /* FLECHAS */
     /* ========================================= */
 
     .arrow {
+
       position: absolute;
 
       top: 50%;
 
-      transform: translateY(-50%);
+      transform:
+        translateY(-50%);
 
       z-index: 20;
 
@@ -135,56 +144,37 @@
       height: 70px;
 
       border: none;
+
       border-radius: 8px;
 
       background:
-        rgba(
-          255,
-          255,
-          255,
-          0.08
-        );
+        rgba(255,255,255,0.10);
 
       color:
-        rgba(
-          20,
-          20,
-          20,
-          0.90
-        );
+        rgba(255,255,255,0.95);
 
       font-size: 58px;
-      font-weight: normal;
+
       line-height: 1;
 
       cursor: pointer;
 
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       padding: 0;
 
       text-shadow:
-        0 1px 3px
-        rgba(
-          255,
-          255,
-          255,
-          0.95
-        ),
-
         0 1px 5px
-        rgba(
-          0,
-          0,
-          0,
-          0.25
-        );
+        rgba(0,0,0,0.7);
 
       transition:
         transform 0.15s ease,
         background 0.15s ease;
+
     }
 
 
@@ -199,25 +189,23 @@
 
 
     .arrow:active {
+
       transform:
         translateY(-50%)
         scale(0.85);
 
       background:
-        rgba(
-          255,
-          255,
-          255,
-          0.25
-        );
+        rgba(255,255,255,0.25);
+
     }
 
 
     /* ========================================= */
-    /* CARRUSEL DE MINIATURAS */
+    /* MINIATURAS */
     /* ========================================= */
 
     .thumbnails {
+
       width: 100%;
 
       display: flex;
@@ -232,8 +220,6 @@
         4px
         12px;
 
-      margin-top: 0;
-
       scroll-behavior: smooth;
 
       -webkit-overflow-scrolling: touch;
@@ -241,6 +227,7 @@
       scrollbar-width: thin;
 
       touch-action: pan-x;
+
     }
 
 
@@ -249,6 +236,7 @@
     /* ========================================= */
 
     .thumb {
+
       min-width: 70px;
       width: 70px;
 
@@ -270,31 +258,35 @@
         transform 0.15s ease,
         border 0.15s ease,
         background 0.15s ease;
+
     }
 
 
-    /* ========================================= */
-    /* MINIATURA ACTIVA */
-    /* ========================================= */
-
     .thumb.active {
+
       border-color: #333;
+
       background: #ffffff;
+
     }
 
 
     .thumb:active {
+
       transform:
         scale(0.94);
+
     }
 
 
     /* ========================================= */
-    /* IMAGEN DE MINIATURA */
+    /* IMAGEN MINIATURA */
     /* ========================================= */
 
     .thumb img {
+
       width: 100%;
+
       height: 90px;
 
       object-fit: contain;
@@ -302,17 +294,20 @@
       display: block;
 
       pointer-events: none;
+
     }
 
 
     /* ========================================= */
-    /* NUMERO DE LA MINIATURA */
+    /* NUMERO MINIATURA */
     /* ========================================= */
 
     .thumb-number {
+
       width: 100%;
 
       font-size: 12px;
+
       font-weight: bold;
 
       margin-top: 4px;
@@ -320,11 +315,12 @@
       color: #222;
 
       pointer-events: none;
+
     }
 
 
     /* ========================================= */
-    /* TELEFONOS MUY PEQUEÑOS */
+    /* MOVIL */
     /* ========================================= */
 
     @media (max-width: 400px) {
@@ -335,74 +331,83 @@
 
       #counter {
         font-size: 17px;
-        margin: 3px 0 6px;
       }
 
       .main-image-container {
+
         height: 65vh;
+
         min-height: 340px;
+
         max-height: 620px;
+
       }
 
       .arrow {
+
         width: 42px;
+
         height: 64px;
+
         font-size: 52px;
-      }
 
-      #previousButton {
-        left: 0;
-      }
-
-      #nextButton {
-        right: 0;
-      }
-
-      .thumbnails {
-        gap: 7px;
-        padding:
-          6px
-          2px
-          10px;
       }
 
       .thumb {
+
         min-width: 64px;
+
         width: 64px;
+
         padding: 3px;
+
       }
 
       .thumb img {
+
         height: 82px;
+
       }
 
       .thumb-number {
+
         font-size: 11px;
+
       }
 
     }
 
 
     /* ========================================= */
-    /* PANTALLAS MAS GRANDES */
+    /* PC */
     /* ========================================= */
 
     @media (min-width: 701px) {
 
       .carousel {
+
         max-width: 750px;
+
         padding: 8px;
+
       }
 
       .main-image-container {
+
         height: 72vh;
+
         max-height: 720px;
+
       }
 
       .arrow {
+
         width: 58px;
+
         height: 80px;
+
         font-size: 65px;
+
       }
 
       #previousButton {
@@ -425,16 +430,10 @@
 
   <div class="carousel">
 
-    <!-- CONTADOR -->
-
     <div id="counter">
       SKIN 01 / 64
     </div>
 
-
-    <!-- ======================================= -->
-    <!-- VISUALIZADOR PRINCIPAL -->
-    <!-- ======================================= -->
 
     <div class="viewer">
 
@@ -443,16 +442,13 @@
         id="mainImageContainer"
       >
 
-        <!-- IMAGEN PRINCIPAL -->
-
         <img
           id="mainImage"
           src=""
           alt="Skin"
+          draggable="false"
         >
 
-
-        <!-- FLECHA IZQUIERDA -->
 
         <button
           type="button"
@@ -463,8 +459,6 @@
           ‹
         </button>
 
-
-        <!-- FLECHA DERECHA -->
 
         <button
           type="button"
@@ -480,15 +474,10 @@
     </div>
 
 
-    <!-- ======================================= -->
-    <!-- MINIATURAS -->
-    <!-- ======================================= -->
-
     <div
       class="thumbnails"
       id="thumbnails"
-    >
-    </div>
+    ></div>
 
   </div>
 
@@ -496,340 +485,88 @@
 
   <script>
 
+
     /* ========================================= */
     /* LISTA DE IMAGENES */
     /* ========================================= */
 
     const images = [
 
-      {
-        name: "01",
-        url: "https://i.postimg.cc/9WpcsYTr/01.png"
-      },
+      ["01", "https://i.postimg.cc/9WpcsYTr/01.png"],
+      ["02", "https://i.postimg.cc/x0R9B3H8/02.png"],
+      ["03", "https://i.postimg.cc/bzTq49bd/03.png"],
+      ["04", "https://i.postimg.cc/TR9TBJmy/04.png"],
+      ["05", "https://i.postimg.cc/7HtwZPmN/05.png"],
+      ["06", "https://i.postimg.cc/L9Q284N0/06.png"],
+      ["07", "https://i.postimg.cc/54Kb29nP/07.png"],
+      ["08", "https://i.postimg.cc/qJD4vBjP/08.png"],
+      ["09", "https://i.postimg.cc/Y7dp38Mn/09.png"],
+      ["10", "https://i.postimg.cc/TxtR9QfF/10.png"],
+      ["11", "https://i.postimg.cc/gpgYD4mf/11.png"],
+      ["12", "https://i.postimg.cc/wzw6VF9K/12.png"],
+      ["13", "https://i.postimg.cc/rcbq6mdz/13.png"],
+      ["14", "https://i.postimg.cc/PhcdGxLP/14.png"],
+      ["15", "https://i.postimg.cc/TGST8wy5/15.png"],
+      ["16", "https://i.postimg.cc/2mJCp6qw/16.png"],
+      ["17", "https://i.postimg.cc/PTwTdjZV/17.png"],
+      ["18", "https://i.postimg.cc/5bCbfVvr/18.png"],
+      ["19", "https://i.postimg.cc/GdydbCYN/19.png"],
+      ["20", "https://i.postimg.cc/xnzn92MS/20.png"],
+      ["21", "https://i.postimg.cc/8TgD50mV/21.png"],
+      ["22", "https://i.postimg.cc/8TgD50mN/22.png"],
+      ["23", "https://i.postimg.cc/gGbdJTHz/23.png"],
+      ["24", "https://i.postimg.cc/hKRgj51f/24.png"],
+      ["25", "https://i.postimg.cc/t9dbVNBn/25.png"],
+      ["26", "https://i.postimg.cc/mT34FymF/26.png"],
+      ["27", "https://i.postimg.cc/33jhDFtj/27.png"],
+      ["28", "https://i.postimg.cc/2CdYB70H/28.png"],
+      ["29", "https://i.postimg.cc/qkkTc6F5/29.png"],
+      ["30", "https://i.postimg.cc/088sGK4F/30.png"],
+      ["31", "https://i.postimg.cc/088sGK3g/31.png"],
+      ["32", "https://i.postimg.cc/Pttjbvck/32.png"],
+      ["33", "https://i.postimg.cc/bz3jmNcJ/33.png"],
+      ["34", "https://i.postimg.cc/69YNM5Jv/34.png"],
+      ["35", "https://i.postimg.cc/QX0rfxGp/35.png"],
+      ["36", "https://i.postimg.cc/Q8CZwGhB/36.png"],
+      ["37", "https://i.postimg.cc/2kyNMRrH/37.png"],
+      ["38", "https://i.postimg.cc/Yr0BZKMs/38.png"],
+      ["39", "https://i.postimg.cc/hDYRqytM/39.png"],
+      ["40", "https://i.postimg.cc/zzQY1tGt/40.png"],
+      ["41", "https://i.postimg.cc/rVH2Lnpw/41.png"],
+      ["42", "https://i.postimg.cc/Q8zZr4Mt/42.png"],
+      ["43", "https://i.postimg.cc/XW1bFJkc/43.png"],
+      ["44", "https://i.postimg.cc/gdwPKWg1/44.png"],
+      ["45", "https://i.postimg.cc/7DCyNkBk/45.png"],
+      ["46", "https://i.postimg.cc/DFt3jMDw/46.png"],
+      ["47", "https://i.postimg.cc/Jm9C62gh/47.png"],
+      ["48", "https://i.postimg.cc/jtP0Gh0k/48.png"],
+      ["49", "https://i.postimg.cc/JMZV9QV2/49.png"],
+      ["50", "https://i.postimg.cc/mT4fRFTL/50.png"],
+      ["51", "https://i.postimg.cc/dJFPvTJ0/51.png"],
+      ["52", "https://i.postimg.cc/hK0FGPGT/52.png"],
+      ["53", "https://i.postimg.cc/9cB3fFfK/53.png"],
+      ["54", "https://i.postimg.cc/mbZv1fzf/54.png"],
+      ["55", "https://i.postimg.cc/yV6M34gV/55.png"],
+      ["56", "https://i.postimg.cc/7xPFJ8GY/56.png"],
+      ["57", "https://i.postimg.cc/XV2TwHdp/57.png"],
+      ["58", "https://i.postimg.cc/KZ9dnqBt/58.png"],
+      ["59", "https://i.postimg.cc/zJd9ntKS/59.png"],
+      ["60", "https://i.postimg.cc/yVfwFQcP/60.png"],
+      ["61", "https://i.postimg.cc/WNCCyd5y/61.png"],
+      ["62", "https://i.postimg.cc/GLVVf4Mw/62.png"],
+      ["63", "https://i.postimg.cc/7HddR5B4/63.png"],
+      ["64", "https://i.postimg.cc/PX997C6T/64.png"]
 
-      {
-        name: "02",
-        url: "https://i.postimg.cc/x0R9B3H8/02.png"
-      },
+    ].map(
+      function(item) {
 
-      {
-        name: "03",
-        url: "https://i.postimg.cc/bzTq49bd/03.png"
-      },
+        return {
+          name: item[0],
+          url: item[1]
+        };
 
-      {
-        name: "04",
-        url: "https://i.postimg.cc/TR9TBJmy/04.png"
-      },
-
-      {
-        name: "05",
-        url: "https://i.postimg.cc/7HtwZPmN/05.png"
-      },
-
-      {
-        name: "06",
-        url: "https://i.postimg.cc/L9Q284N0/06.png"
-      },
-
-      {
-        name: "07",
-        url: "https://i.postimg.cc/54Kb29nP/07.png"
-      },
-
-      {
-        name: "08",
-        url: "https://i.postimg.cc/qJD4vBjP/08.png"
-      },
-
-      {
-        name: "09",
-        url: "https://i.postimg.cc/Y7dp38Mn/09.png"
-      },
-
-      {
-        name: "10",
-        url: "https://i.postimg.cc/TxtR9QfF/10.png"
-      },
-
-      {
-        name: "11",
-        url: "https://i.postimg.cc/gpgYD4mf/11.png"
-      },
-
-      {
-        name: "12",
-        url: "https://i.postimg.cc/wzw6VF9K/12.png"
-      },
-
-      {
-        name: "13",
-        url: "https://i.postimg.cc/rcbq6mdz/13.png"
-      },
-
-      {
-        name: "14",
-        url: "https://i.postimg.cc/PhcdGxLP/14.png"
-      },
-
-      {
-        name: "15",
-        url: "https://i.postimg.cc/TGST8wy5/15.png"
-      },
-
-      {
-        name: "16",
-        url: "https://i.postimg.cc/2mJCp6qw/16.png"
-      },
-
-      {
-        name: "17",
-        url: "https://i.postimg.cc/PTwTdjZV/17.png"
-      },
-
-      {
-        name: "18",
-        url: "https://i.postimg.cc/5bCbfVvr/18.png"
-      },
-
-      {
-        name: "19",
-        url: "https://i.postimg.cc/GdydbCYN/19.png"
-      },
-
-      {
-        name: "20",
-        url: "https://i.postimg.cc/xnzn92MS/20.png"
-      },
-
-      {
-        name: "21",
-        url: "https://i.postimg.cc/8TgD50mV/21.png"
-      },
-
-      {
-        name: "22",
-        url: "https://i.postimg.cc/8TgD50mN/22.png"
-      },
-
-      {
-        name: "23",
-        url: "https://i.postimg.cc/gGbdJTHz/23.png"
-      },
-
-      {
-        name: "24",
-        url: "https://i.postimg.cc/hKRgj51f/24.png"
-      },
-
-      {
-        name: "25",
-        url: "https://i.postimg.cc/t9dbVNBn/25.png"
-      },
-
-      {
-        name: "26",
-        url: "https://i.postimg.cc/mT34FymF/26.png"
-      },
-
-      {
-        name: "27",
-        url: "https://i.postimg.cc/33jhDFtj/27.png"
-      },
-
-      {
-        name: "28",
-        url: "https://i.postimg.cc/2CdYB70H/28.png"
-      },
-
-      {
-        name: "29",
-        url: "https://i.postimg.cc/qkkTc6F5/29.png"
-      },
-
-      {
-        name: "30",
-        url: "https://i.postimg.cc/088sGK4F/30.png"
-      },
-
-      {
-        name: "31",
-        url: "https://i.postimg.cc/088sGK3g/31.png"
-      },
-
-      {
-        name: "32",
-        url: "https://i.postimg.cc/Pttjbvck/32.png"
-      },
-
-      {
-        name: "33",
-        url: "https://i.postimg.cc/bz3jmNcJ/33.png"
-      },
-
-      {
-        name: "34",
-        url: "https://i.postimg.cc/69YNM5Jv/34.png"
-      },
-
-      {
-        name: "35",
-        url: "https://i.postimg.cc/QX0rfxGp/35.png"
-      },
-
-      {
-        name: "36",
-        url: "https://i.postimg.cc/Q8CZwGhB/36.png"
-      },
-
-      {
-        name: "37",
-        url: "https://i.postimg.cc/2kyNMRrH/37.png"
-      },
-
-      {
-        name: "38",
-        url: "https://i.postimg.cc/Yr0BZKMs/38.png"
-      },
-
-      {
-        name: "39",
-        url: "https://i.postimg.cc/hDYRqytM/39.png"
-      },
-
-      {
-        name: "40",
-        url: "https://i.postimg.cc/zzQY1tGt/40.png"
-      },
-
-      {
-        name: "41",
-        url: "https://i.postimg.cc/rVH2Lnpw/41.png"
-      },
-
-      {
-        name: "42",
-        url: "https://i.postimg.cc/Q8zZr4Mt/42.png"
-      },
-
-      {
-        name: "43",
-        url: "https://i.postimg.cc/XW1bFJkc/43.png"
-      },
-
-      {
-        name: "44",
-        url: "https://i.postimg.cc/gdwPKWg1/44.png"
-      },
-
-      {
-        name: "45",
-        url: "https://i.postimg.cc/7DCyNkBk/45.png"
-      },
-
-      {
-        name: "46",
-        url: "https://i.postimg.cc/DFt3jMDw/46.png"
-      },
-
-      {
-        name: "47",
-        url: "https://i.postimg.cc/Jm9C62gh/47.png"
-      },
-
-      {
-        name: "48",
-        url: "https://i.postimg.cc/jtP0Gh0k/48.png"
-      },
-
-      {
-        name: "49",
-        url: "https://i.postimg.cc/JMZV9QV2/49.png"
-      },
-
-      {
-        name: "50",
-        url: "https://i.postimg.cc/mT4fRFTL/50.png"
-      },
-
-      {
-        name: "51",
-        url: "https://i.postimg.cc/dJFPvTJ0/51.png"
-      },
-
-      {
-        name: "52",
-        url: "https://i.postimg.cc/hK0FGPGT/52.png"
-      },
-
-      {
-        name: "53",
-        url: "https://i.postimg.cc/9cB3fFfK/53.png"
-      },
-
-      {
-        name: "54",
-        url: "https://i.postimg.cc/mbZv1fzf/54.png"
-      },
-
-      {
-        name: "55",
-        url: "https://i.postimg.cc/yV6M34gV/55.png"
-      },
-
-      {
-        name: "56",
-        url: "https://i.postimg.cc/7xPFJ8GY/56.png"
-      },
-
-      {
-        name: "57",
-        url: "https://i.postimg.cc/XV2TwHdp/57.png"
-      },
-
-      {
-        name: "58",
-        url: "https://i.postimg.cc/KZ9dnqBt/58.png"
-      },
-
-      {
-        name: "59",
-        url: "https://i.postimg.cc/zJd9ntKS/59.png"
-      },
-
-      {
-        name: "60",
-        url: "https://i.postimg.cc/yVfwFQcP/60.png"
-      },
-
-      {
-        name: "61",
-        url: "https://i.postimg.cc/WNCCyd5y/61.png"
-      },
-
-      {
-        name: "62",
-        url: "https://i.postimg.cc/GLVVf4Mw/62.png"
-      },
-
-      {
-        name: "63",
-        url: "https://i.postimg.cc/7HddR5B4/63.png"
-      },
-
-      {
-        name: "64",
-        url: "https://i.postimg.cc/PX997C6T/64.png"
       }
-
-    ];
-
-
-    /* ========================================= */
-    /* INDICE ACTUAL */
-    /* ========================================= */
-
-    let currentIndex = 0;
+    );
 
 
     /* ========================================= */
@@ -839,6 +576,12 @@
     const mainImage =
       document.getElementById(
         "mainImage"
+      );
+
+
+    const mainImageContainer =
+      document.getElementById(
+        "mainImageContainer"
       );
 
 
@@ -867,21 +610,225 @@
 
 
     /* ========================================= */
+    /* INDICE */
+    /* ========================================= */
+
+    let currentIndex = 0;
+
+
+    /* ========================================= */
+    /* VARIABLES DE ZOOM */
+    /* ========================================= */
+
+    let scale = 1;
+
+    let translateX = 0;
+
+    let translateY = 0;
+
+    const minScale = 1;
+
+    const maxScale = 4;
+
+
+    /* ========================================= */
+    /* VARIABLES TACTILES */
+    /* ========================================= */
+
+    let startX = 0;
+
+    let startY = 0;
+
+    let startTranslateX = 0;
+
+    let startTranslateY = 0;
+
+    let initialDistance = 0;
+
+    let initialScale = 1;
+
+    let isDragging = false;
+
+    let isPinching = false;
+
+    let moved = false;
+
+
+    /* ========================================= */
+    /* APLICAR TRANSFORMACION */
+    /* ========================================= */
+
+    function updateTransform(
+      animate = false
+    ) {
+
+      if (
+        animate
+      ) {
+
+        mainImage.style.transition =
+          "transform 0.2s ease";
+
+      } else {
+
+        mainImage.style.transition =
+          "none";
+
+      }
+
+
+      mainImage.style.transform =
+        `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+    }
+
+
+    /* ========================================= */
+    /* RESETEAR ZOOM */
+    /* ========================================= */
+
+    function resetZoom() {
+
+      scale = 1;
+
+      translateX = 0;
+
+      translateY = 0;
+
+      updateTransform(
+        true
+      );
+
+    }
+
+
+    /* ========================================= */
+    /* LIMITAR MOVIMIENTO */
+    /* ========================================= */
+
+    function limitPosition() {
+
+      if (
+        scale <= 1
+      ) {
+
+        translateX = 0;
+
+        translateY = 0;
+
+        return;
+
+      }
+
+
+      const containerWidth =
+        mainImageContainer.clientWidth;
+
+
+      const containerHeight =
+        mainImageContainer.clientHeight;
+
+
+      const imageWidth =
+        mainImage.offsetWidth;
+
+
+      const imageHeight =
+        mainImage.offsetHeight;
+
+
+      const scaledWidth =
+        imageWidth * scale;
+
+
+      const scaledHeight =
+        imageHeight * scale;
+
+
+      const maxX =
+        Math.max(
+          0,
+          (scaledWidth - containerWidth) / 2
+        );
+
+
+      const maxY =
+        Math.max(
+          0,
+          (scaledHeight - containerHeight) / 2
+        );
+
+
+      translateX =
+        Math.max(
+          -maxX,
+          Math.min(
+            maxX,
+            translateX
+          )
+        );
+
+
+      translateY =
+        Math.max(
+          -maxY,
+          Math.min(
+            maxY,
+            translateY
+          )
+        );
+
+    }
+
+
+    /* ========================================= */
+    /* DISTANCIA ENTRE DOS DEDOS */
+    /* ========================================= */
+
+    function getDistance(
+      touch1,
+      touch2
+    ) {
+
+      const x =
+        touch2.clientX -
+        touch1.clientX;
+
+
+      const y =
+        touch2.clientY -
+        touch1.clientY;
+
+
+      return Math.sqrt(
+        x * x +
+        y * y
+      );
+
+    }
+
+
+    /* ========================================= */
     /* CREAR MINIATURAS */
     /* ========================================= */
 
     function createThumbnails() {
 
       images.forEach(
-        function(image, index) {
+        function(
+          image,
+          index
+        ) {
 
           const thumb =
             document.createElement(
               "div"
             );
 
+
           thumb.className =
             "thumb";
+
 
           thumb.dataset.index =
             index;
@@ -892,8 +839,10 @@
               "img"
             );
 
+
           imageElement.src =
             image.url;
+
 
           imageElement.alt =
             "Skin " +
@@ -905,8 +854,10 @@
               "div"
             );
 
+
           number.className =
             "thumb-number";
+
 
           number.textContent =
             image.name;
@@ -915,6 +866,7 @@
           thumb.appendChild(
             imageElement
           );
+
 
           thumb.appendChild(
             number
@@ -927,6 +879,7 @@
 
               currentIndex =
                 index;
+
 
               updateCarousel();
 
@@ -945,36 +898,17 @@
 
 
     /* ========================================= */
-    /* OBTENER MINIATURAS */
-    /* ========================================= */
-
-    function getThumbs() {
-
-      return document.querySelectorAll(
-        ".thumb"
-      );
-
-    }
-
-
-    /* ========================================= */
     /* ACTUALIZAR CARRUSEL */
     /* ========================================= */
 
     function updateCarousel() {
 
-      if (
-        images.length === 0
-      ) {
-        return;
-      }
-
-
       const image =
         images[currentIndex];
 
 
-      /* CAMBIAR IMAGEN */
+      resetZoom();
+
 
       mainImage.src =
         image.url;
@@ -985,9 +919,8 @@
         image.name;
 
 
-      /* ACTUALIZAR CONTADOR */
-
       counter.textContent =
+
         "SKIN " +
 
         String(
@@ -1003,13 +936,15 @@
 
 
       const thumbs =
-        getThumbs();
+        document.querySelectorAll(
+          ".thumb"
+        );
 
-
-      /* QUITAR SELECCION */
 
       thumbs.forEach(
-        function(thumb) {
+        function(
+          thumb
+        ) {
 
           thumb.classList.remove(
             "active"
@@ -1018,8 +953,6 @@
         }
       );
 
-
-      /* ACTIVAR MINIATURA ACTUAL */
 
       if (
         thumbs[currentIndex]
@@ -1031,11 +964,6 @@
             "active"
           );
 
-
-        /*
-         * Mantiene visible
-         * la skin activa.
-         */
 
         thumbs[currentIndex]
           .scrollIntoView({
@@ -1057,7 +985,7 @@
 
 
     /* ========================================= */
-    /* SIGUIENTE IMAGEN */
+    /* SIGUIENTE */
     /* ========================================= */
 
     function nextImage() {
@@ -1081,7 +1009,7 @@
 
 
     /* ========================================= */
-    /* IMAGEN ANTERIOR */
+    /* ANTERIOR */
     /* ========================================= */
 
     function previousImage() {
@@ -1105,110 +1033,343 @@
 
 
     /* ========================================= */
-    /* BOTON SIGUIENTE */
+    /* BOTONES */
     /* ========================================= */
 
     nextButton.addEventListener(
       "click",
-      function() {
-
-        nextImage();
-
-      }
+      nextImage
     );
 
-
-    /* ========================================= */
-    /* BOTON ANTERIOR */
-    /* ========================================= */
 
     previousButton.addEventListener(
       "click",
-      function() {
-
-        previousImage();
-
-      }
+      previousImage
     );
 
 
     /* ========================================= */
-    /* DESLIZAR EN MOVIL */
+    /* INICIO DEL TOQUE */
     /* ========================================= */
 
-    let startX = 0;
-    let startY = 0;
-
-
-    mainImage.addEventListener(
+    mainImageContainer.addEventListener(
       "touchstart",
 
-      function(event) {
+      function(
+        event
+      ) {
 
-        startX =
-          event.touches[0]
-            .clientX;
+        moved = false;
 
 
-        startY =
-          event.touches[0]
-            .clientY;
+        if (
+          event.touches.length === 2
+        ) {
+
+          isPinching = true;
+
+          isDragging = false;
+
+
+          initialDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+
+          initialScale =
+            scale;
+
+
+          return;
+
+        }
+
+
+        if (
+          event.touches.length === 1
+        ) {
+
+          isDragging = true;
+
+          isPinching = false;
+
+
+          startX =
+            event.touches[0]
+              .clientX;
+
+
+          startY =
+            event.touches[0]
+              .clientY;
+
+
+          startTranslateX =
+            translateX;
+
+
+          startTranslateY =
+            translateY;
+
+        }
 
       },
 
       {
-        passive: true
+        passive: false
       }
 
     );
 
 
-    mainImage.addEventListener(
-      "touchend",
+    /* ========================================= */
+    /* MOVIMIENTO DE DEDOS */
+    /* ========================================= */
 
-      function(event) {
+    mainImageContainer.addEventListener(
+      "touchmove",
 
-        const endX =
-          event.changedTouches[0]
-            .clientX;
-
-
-        const endY =
-          event.changedTouches[0]
-            .clientY;
-
-
-        const differenceX =
-          startX - endX;
-
-
-        const differenceY =
-          startY - endY;
-
+      function(
+        event
+      ) {
 
         /*
-         * Solo cambiar si el gesto
-         * fue principalmente horizontal.
+         * ZOOM CON DOS DEDOS
          */
 
         if (
-
-          Math.abs(
-            differenceX
-          )
-
-          >
-
-          Math.abs(
-            differenceY
-          )
-
+          event.touches.length === 2
         ) {
 
-          /* DESLIZAR A LA IZQUIERDA */
+          event.preventDefault();
+
+
+          isPinching = true;
+
+          isDragging = false;
+
+
+          const currentDistance =
+            getDistance(
+              event.touches[0],
+              event.touches[1]
+            );
+
+
+          const zoomRatio =
+            currentDistance /
+            initialDistance;
+
+
+          scale =
+            initialScale *
+            zoomRatio;
+
+
+          scale =
+            Math.max(
+              minScale,
+              Math.min(
+                maxScale,
+                scale
+              )
+            );
+
+
+          limitPosition();
+
+
+          updateTransform();
+
+          return;
+
+        }
+
+
+        /*
+         * ARRASTRAR O CAMBIAR IMAGEN
+         */
+
+        if (
+          event.touches.length === 1 &&
+          isDragging
+        ) {
+
+          const currentX =
+            event.touches[0]
+              .clientX;
+
+
+          const currentY =
+            event.touches[0]
+              .clientY;
+
+
+          const deltaX =
+            currentX -
+            startX;
+
+
+          const deltaY =
+            currentY -
+            startY;
+
 
           if (
-            differenceX > 50
+            Math.abs(
+              deltaX
+            ) > 5 ||
+
+            Math.abs(
+              deltaY
+            ) > 5
+          ) {
+
+            moved = true;
+
+          }
+
+
+          /*
+           * SI HAY ZOOM:
+           * MOVER LA IMAGEN
+           */
+
+          if (
+            scale > 1
+          ) {
+
+            event.preventDefault();
+
+
+            translateX =
+              startTranslateX +
+              deltaX;
+
+
+            translateY =
+              startTranslateY +
+              deltaY;
+
+
+            limitPosition();
+
+
+            updateTransform();
+
+          }
+
+        }
+
+      },
+
+      {
+        passive: false
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* FINAL DEL TOQUE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchend",
+
+      function(
+        event
+      ) {
+
+        /*
+         * TERMINAR ZOOM
+         */
+
+        if (
+          isPinching
+        ) {
+
+          if (
+            scale <= 1.02
+          ) {
+
+            resetZoom();
+
+          } else {
+
+            limitPosition();
+
+            updateTransform(
+              true
+            );
+
+          }
+
+
+          if (
+            event.touches.length < 2
+          ) {
+
+            isPinching = false;
+
+          }
+
+        }
+
+
+        /*
+         * CAMBIO DE IMAGEN
+         * SOLO SI NO HAY ZOOM
+         */
+
+        if (
+          event.changedTouches.length === 1 &&
+          scale <= 1.02 &&
+          !isPinching
+        ) {
+
+          const endX =
+            event.changedTouches[0]
+              .clientX;
+
+
+          const endY =
+            event.changedTouches[0]
+              .clientY;
+
+
+          const differenceX =
+            startX -
+            endX;
+
+
+          const differenceY =
+            startY -
+            endY;
+
+
+          /*
+           * DESLIZAR A LA IZQUIERDA
+           */
+
+          if (
+
+            Math.abs(
+              differenceX
+            )
+
+            >
+
+            Math.abs(
+              differenceY
+            )
+
+            &&
+
+            differenceX > 60
+
           ) {
 
             nextImage();
@@ -1216,15 +1377,42 @@
           }
 
 
-          /* DESLIZAR A LA DERECHA */
+          /*
+           * DESLIZAR A LA DERECHA
+           */
 
           else if (
-            differenceX < -50
+
+            Math.abs(
+              differenceX
+            )
+
+            >
+
+            Math.abs(
+              differenceY
+            )
+
+            &&
+
+            differenceX < -60
+
           ) {
 
             previousImage();
 
           }
+
+        }
+
+
+        if (
+          event.touches.length === 0
+        ) {
+
+          isDragging = false;
+
+          isPinching = false;
 
         }
 
@@ -1238,13 +1426,111 @@
 
 
     /* ========================================= */
-    /* TECLADO PARA PC */
+    /* CANCELAR TOQUE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "touchcancel",
+
+      function() {
+
+        isDragging = false;
+
+        isPinching = false;
+
+      }
+    );
+
+
+    /* ========================================= */
+    /* ZOOM CON RUEDA DEL MOUSE */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "wheel",
+
+      function(
+        event
+      ) {
+
+        event.preventDefault();
+
+
+        if (
+          event.deltaY < 0
+        ) {
+
+          scale += 0.2;
+
+        }
+
+        else {
+
+          scale -= 0.2;
+
+        }
+
+
+        scale =
+          Math.max(
+            minScale,
+            Math.min(
+              maxScale,
+              scale
+            )
+          );
+
+
+        if (
+          scale <= 1
+        ) {
+
+          translateX = 0;
+
+          translateY = 0;
+
+        }
+
+
+        limitPosition();
+
+
+        updateTransform();
+
+      },
+
+      {
+        passive: false
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* DOBLE CLICK PARA RESET */
+    /* ========================================= */
+
+    mainImageContainer.addEventListener(
+      "dblclick",
+
+      function() {
+
+        resetZoom();
+
+      }
+    );
+
+
+    /* ========================================= */
+    /* TECLADO */
     /* ========================================= */
 
     document.addEventListener(
       "keydown",
 
-      function(event) {
+      function(
+        event
+      ) {
 
         if (
           event.key ===
@@ -1265,6 +1551,16 @@
 
         }
 
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          resetZoom();
+
+        }
+
       }
 
     );
@@ -1277,6 +1573,7 @@
     createThumbnails();
 
     updateCarousel();
+
 
   </script>
 
