@@ -1,812 +1,1284 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<meta
+  <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
->
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
 
-<title>Skin Viewer</title>
+  <title>Visualizador de Skins</title>
 
-<style>
+  <style>
 
-/* =========================================
-   CONFIGURACION GENERAL
-========================================= */
+    /* ========================================= */
+    /* CONFIGURACION GENERAL - MOBILE FIRST */
+    /* ========================================= */
 
-* {
-    box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background: #d9d9d9;
-}
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
 
-/* =========================================
-   CONTENEDOR PRINCIPAL
-   DISEÑADO PARA MOVIL
-========================================= */
+    body {
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-.viewer {
+      background: #f5f5f5;
 
-    width: 100%;
-    max-width: 480px;
+      text-align: center;
 
-    height: 100dvh;
-    min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-    margin: 0 auto;
 
-    display: flex;
-    flex-direction: column;
+    /* ========================================= */
+    /* CONTENEDOR PRINCIPAL */
+    /* ========================================= */
 
-    background: #f5f5f5;
+    .carousel {
+      width: 100%;
+      margin: 0 auto;
+      padding: 4px;
+    }
 
-    overflow: hidden;
 
-    position: relative;
+    /* ========================================= */
+    /* CONTADOR */
+    /* ========================================= */
 
-    box-shadow:
-        0 0 30px rgba(0,0,0,0.20);
+    #counter {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 4px 0 8px;
+      color: #222;
+    }
 
-}
 
-/* =========================================
-   CONTADOR SUPERIOR
-========================================= */
+    /* ========================================= */
+    /* VISUALIZADOR */
+    /* ========================================= */
 
-.counter {
+    .viewer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-    height: 52px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* ========================================= */
+    /* ZONA PRINCIPAL DE LA IMAGEN */
+    /* ========================================= */
 
-    flex-shrink: 0;
+    .main-image-container {
+      width: 100%;
 
-    background: #ffffff;
+      height: 68vh;
+      min-height: 380px;
+      max-height: 680px;
 
-    font-size: 17px;
-    font-weight: bold;
-    letter-spacing: 1px;
+      position: relative;
 
-    border-bottom: 1px solid #dddddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-}
+      overflow: hidden;
 
-/* =========================================
-   AREA PRINCIPAL
-========================================= */
+      touch-action: pan-y;
+    }
 
-.main-area {
 
-    flex: 1;
+    /* ========================================= */
+    /* IMAGEN PRINCIPAL */
+    /* ========================================= */
 
-    min-height: 0;
+    #mainImage {
+      width: 100%;
+      height: 100%;
 
-    width: 100%;
+      object-fit: contain;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      display: block;
 
-    position: relative;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
 
-    overflow: hidden;
 
-    padding: 12px 14px;
+    /* ========================================= */
+    /* FLECHAS SOBRE LA IMAGEN */
+    /* ========================================= */
 
-    background: #f3f3f3;
+    .arrow {
+      position: absolute;
 
-}
+      top: 50%;
 
-/* =========================================
-   IMAGEN PRINCIPAL
-========================================= */
+      transform: translateY(-50%);
 
-.main-image {
+      z-index: 20;
 
-    display: block;
+      width: 46px;
+      height: 70px;
 
-    width: 100%;
-    height: 100%;
+      border: none;
+      border-radius: 8px;
 
-    max-width: 100%;
-    max-height: 100%;
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.08
+        );
 
-    object-fit: contain;
+      color:
+        rgba(
+          20,
+          20,
+          20,
+          0.90
+        );
 
-    object-position: center center;
+      font-size: 58px;
+      font-weight: normal;
+      line-height: 1;
 
-    user-select: none;
+      cursor: pointer;
 
-    -webkit-user-drag: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    image-rendering: auto;
+      padding: 0;
 
-}
+      text-shadow:
+        0 1px 3px
+        rgba(
+          255,
+          255,
+          255,
+          0.95
+        ),
 
-/* =========================================
-   BOTONES DE NAVEGACION
-========================================= */
+        0 1px 5px
+        rgba(
+          0,
+          0,
+          0,
+          0.25
+        );
 
-.nav-button {
-
-    position: absolute;
-
-    width: 44px;
-    height: 44px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,0.88);
-
-    color: #222;
-
-    font-size: 34px;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    z-index: 20;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    box-shadow:
-        0 2px 10px rgba(0,0,0,0.25);
-
-    transition:
+      transition:
         transform 0.15s ease,
         background 0.15s ease;
+    }
 
-    -webkit-tap-highlight-color: transparent;
 
-}
+    #previousButton {
+      left: 2px;
+    }
 
-.nav-button:hover {
 
-    transform: scale(1.08);
+    #nextButton {
+      right: 2px;
+    }
 
-    background: white;
 
-}
+    .arrow:active {
+      transform:
+        translateY(-50%)
+        scale(0.85);
 
-.nav-button:active {
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.25
+        );
+    }
 
-    transform: scale(0.94);
 
-}
+    /* ========================================= */
+    /* CARRUSEL DE MINIATURAS */
+    /* ========================================= */
 
-.prev {
-    left: 10px;
-}
+    .thumbnails {
+      width: 100%;
 
-.next {
-    right: 10px;
-}
+      display: flex;
 
-/* =========================================
-   AREA DEL CARRUSEL
-========================================= */
+      gap: 8px;
 
-.thumbnail-area {
+      overflow-x: auto;
+      overflow-y: hidden;
 
-    width: 100%;
+      padding:
+        8px
+        4px
+        12px;
 
-    height: 130px;
+      margin-top: 0;
 
-    flex-shrink: 0;
+      scroll-behavior: smooth;
 
-    display: flex;
-    align-items: center;
+      -webkit-overflow-scrolling: touch;
 
-    gap: 8px;
+      scrollbar-width: thin;
 
-    padding: 8px 10px;
+      touch-action: pan-x;
+    }
 
-    overflow-x: auto;
-    overflow-y: hidden;
 
-    background: #e3e3e3;
+    /* ========================================= */
+    /* TARJETA MINIATURA */
+    /* ========================================= */
 
-    border-top: 1px solid #cccccc;
+    .thumb {
+      min-width: 70px;
+      width: 70px;
 
-    scroll-behavior: smooth;
+      padding: 4px;
 
-    -webkit-overflow-scrolling: touch;
+      background: #eeeeee;
 
-}
+      border:
+        2px solid
+        transparent;
 
-/* =========================================
-   CONTENEDOR DE CADA MINIATURA
-========================================= */
+      border-radius: 6px;
 
-.thumbnail {
+      cursor: pointer;
 
-    width: 70px;
-    height: 108px;
+      flex-shrink: 0;
 
-    flex-shrink: 0;
-
-    padding: 4px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-
-    background: #d2d2d2;
-
-    border-radius: 5px;
-
-    border: 3px solid transparent;
-
-    cursor: pointer;
-
-    overflow: hidden;
-
-    transition:
+      transition:
         transform 0.15s ease,
         border 0.15s ease,
         background 0.15s ease;
-
-    -webkit-tap-highlight-color: transparent;
-
-}
-
-.thumbnail:active {
-
-    transform: scale(0.94);
-
-}
-
-.thumbnail:hover {
-
-    transform: scale(1.04);
-
-}
-
-/* =========================================
-   IMAGEN DE MINIATURA
-========================================= */
-
-.thumbnail img {
-
-    width: 100%;
-    height: 78px;
-
-    object-fit: contain;
-
-    display: block;
-
-    pointer-events: none;
-
-    user-select: none;
-
-    -webkit-user-drag: none;
-
-}
-
-/* =========================================
-   NUMERO DE LA MINIATURA
-========================================= */
-
-.thumbnail-number {
-
-    width: 100%;
-
-    height: 18px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 13px;
-    font-weight: bold;
-
-    color: #222;
-
-    line-height: 1;
-
-    user-select: none;
-
-}
-
-/* =========================================
-   MINIATURA ACTIVA
-========================================= */
-
-.thumbnail.active {
-
-    border-color: #222;
-
-    background: white;
-
-}
-
-/* =========================================
-   SCROLLBAR
-========================================= */
-
-.thumbnail-area::-webkit-scrollbar {
-
-    height: 5px;
-
-}
-
-.thumbnail-area::-webkit-scrollbar-track {
-
-    background: transparent;
-
-}
-
-.thumbnail-area::-webkit-scrollbar-thumb {
-
-    background: #999;
-
-    border-radius: 10px;
-
-}
-
-/* =========================================
-   PANTALLAS GRANDES
-========================================= */
-
-@media (min-width: 481px) {
-
-    body {
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: #cfcfcf;
-
     }
 
-    .viewer {
 
-        height: min(100dvh, 900px);
+    /* ========================================= */
+    /* MINIATURA ACTIVA */
+    /* ========================================= */
 
-        border-radius: 12px;
-
+    .thumb.active {
+      border-color: #333;
+      background: #ffffff;
     }
 
-}
 
-/* =========================================
-   CELULARES PEQUEÑOS
-========================================= */
-
-@media (max-width: 380px) {
-
-    .counter {
-
-        height: 46px;
-
-        font-size: 15px;
-
+    .thumb:active {
+      transform:
+        scale(0.94);
     }
 
-    .thumbnail-area {
 
-        height: 110px;
+    /* ========================================= */
+    /* IMAGEN DE MINIATURA */
+    /* ========================================= */
 
+    .thumb img {
+      width: 100%;
+      height: 90px;
+
+      object-fit: contain;
+
+      display: block;
+
+      pointer-events: none;
     }
 
-    .thumbnail {
 
-        width: 60px;
-        height: 90px;
+    /* ========================================= */
+    /* NUMERO DE LA MINIATURA */
+    /* ========================================= */
 
+    .thumb-number {
+      width: 100%;
+
+      font-size: 12px;
+      font-weight: bold;
+
+      margin-top: 4px;
+
+      color: #222;
+
+      pointer-events: none;
     }
 
-    .thumbnail img {
 
+    /* ========================================= */
+    /* TELEFONOS MUY PEQUEÑOS */
+    /* ========================================= */
+
+    @media (max-width: 400px) {
+
+      .carousel {
+        padding: 2px;
+      }
+
+      #counter {
+        font-size: 17px;
+        margin: 3px 0 6px;
+      }
+
+      .main-image-container {
+        height: 65vh;
+        min-height: 340px;
+        max-height: 620px;
+      }
+
+      .arrow {
+        width: 42px;
         height: 64px;
+        font-size: 52px;
+      }
+
+      #previousButton {
+        left: 0;
+      }
+
+      #nextButton {
+        right: 0;
+      }
+
+      .thumbnails {
+        gap: 7px;
+        padding:
+          6px
+          2px
+          10px;
+      }
+
+      .thumb {
+        min-width: 64px;
+        width: 64px;
+        padding: 3px;
+      }
+
+      .thumb img {
+        height: 82px;
+      }
+
+      .thumb-number {
+        font-size: 11px;
+      }
 
     }
 
-    .thumbnail-number {
 
-        font-size: 12px;
+    /* ========================================= */
+    /* PANTALLAS MAS GRANDES */
+    /* ========================================= */
+
+    @media (min-width: 701px) {
+
+      .carousel {
+        max-width: 750px;
+        padding: 8px;
+      }
+
+      .main-image-container {
+        height: 72vh;
+        max-height: 720px;
+      }
+
+      .arrow {
+        width: 58px;
+        height: 80px;
+        font-size: 65px;
+      }
+
+      #previousButton {
+        left: 10px;
+      }
+
+      #nextButton {
+        right: 10px;
+      }
 
     }
 
-    .nav-button {
-
-        width: 40px;
-        height: 40px;
-
-        font-size: 30px;
-
-    }
-
-}
-
-</style>
+  </style>
 
 </head>
 
+
 <body>
 
-<div class="viewer">
+
+  <div class="carousel">
 
     <!-- CONTADOR -->
 
-    <div
-        class="counter"
-        id="counter"
-    >
-        SKIN 01 / 64
+    <div id="counter">
+      SKIN 01 / 64
     </div>
 
 
+    <!-- ======================================= -->
     <!-- VISUALIZADOR PRINCIPAL -->
+    <!-- ======================================= -->
 
-    <div class="main-area">
+    <div class="viewer">
 
-
-        <!-- BOTON ANTERIOR -->
-
-        <button
-            class="nav-button prev"
-            onclick="previousImage()"
-            aria-label="Imagen anterior"
-        >
-            ‹
-        </button>
-
+      <div
+        class="main-image-container"
+        id="mainImageContainer"
+      >
 
         <!-- IMAGEN PRINCIPAL -->
 
         <img
-            id="mainImage"
-            class="main-image"
-            src=""
-            alt="Skin"
-            draggable="false"
+          id="mainImage"
+          src=""
+          alt="Skin"
         >
 
 
-        <!-- BOTON SIGUIENTE -->
+        <!-- FLECHA IZQUIERDA -->
 
         <button
-            class="nav-button next"
-            onclick="nextImage()"
-            aria-label="Imagen siguiente"
+          type="button"
+          class="arrow"
+          id="previousButton"
+          aria-label="Imagen anterior"
         >
-            ›
+          ‹
         </button>
 
+
+        <!-- FLECHA DERECHA -->
+
+        <button
+          type="button"
+          class="arrow"
+          id="nextButton"
+          aria-label="Imagen siguiente"
+        >
+          ›
+        </button>
+
+      </div>
 
     </div>
 
 
-    <!-- CARRUSEL DE MINIATURAS -->
+    <!-- ======================================= -->
+    <!-- MINIATURAS -->
+    <!-- ======================================= -->
 
     <div
-        class="thumbnail-area"
-        id="thumbnailArea"
-    ></div>
+      class="thumbnails"
+      id="thumbnails"
+    >
+    </div>
+
+  </div>
 
 
-</div>
+
+  <script>
+
+    /* ========================================= */
+    /* LISTA DE IMAGENES */
+    /* ========================================= */
+
+    const images = [
+
+      {
+        name: "01",
+        url: "https://i.postimg.cc/9WpcsYTr/01.png"
+      },
+
+      {
+        name: "02",
+        url: "https://i.postimg.cc/x0R9B3H8/02.png"
+      },
+
+      {
+        name: "03",
+        url: "https://i.postimg.cc/bzTq49bd/03.png"
+      },
+
+      {
+        name: "04",
+        url: "https://i.postimg.cc/TR9TBJmy/04.png"
+      },
+
+      {
+        name: "05",
+        url: "https://i.postimg.cc/7HtwZPmN/05.png"
+      },
+
+      {
+        name: "06",
+        url: "https://i.postimg.cc/L9Q284N0/06.png"
+      },
+
+      {
+        name: "07",
+        url: "https://i.postimg.cc/54Kb29nP/07.png"
+      },
+
+      {
+        name: "08",
+        url: "https://i.postimg.cc/qJD4vBjP/08.png"
+      },
+
+      {
+        name: "09",
+        url: "https://i.postimg.cc/Y7dp38Mn/09.png"
+      },
+
+      {
+        name: "10",
+        url: "https://i.postimg.cc/TxtR9QfF/10.png"
+      },
+
+      {
+        name: "11",
+        url: "https://i.postimg.cc/gpgYD4mf/11.png"
+      },
+
+      {
+        name: "12",
+        url: "https://i.postimg.cc/wzw6VF9K/12.png"
+      },
+
+      {
+        name: "13",
+        url: "https://i.postimg.cc/rcbq6mdz/13.png"
+      },
+
+      {
+        name: "14",
+        url: "https://i.postimg.cc/PhcdGxLP/14.png"
+      },
+
+      {
+        name: "15",
+        url: "https://i.postimg.cc/TGST8wy5/15.png"
+      },
+
+      {
+        name: "16",
+        url: "https://i.postimg.cc/2mJCp6qw/16.png"
+      },
+
+      {
+        name: "17",
+        url: "https://i.postimg.cc/PTwTdjZV/17.png"
+      },
+
+      {
+        name: "18",
+        url: "https://i.postimg.cc/5bCbfVvr/18.png"
+      },
+
+      {
+        name: "19",
+        url: "https://i.postimg.cc/GdydbCYN/19.png"
+      },
+
+      {
+        name: "20",
+        url: "https://i.postimg.cc/xnzn92MS/20.png"
+      },
+
+      {
+        name: "21",
+        url: "https://i.postimg.cc/8TgD50mV/21.png"
+      },
+
+      {
+        name: "22",
+        url: "https://i.postimg.cc/8TgD50mN/22.png"
+      },
+
+      {
+        name: "23",
+        url: "https://i.postimg.cc/gGbdJTHz/23.png"
+      },
+
+      {
+        name: "24",
+        url: "https://i.postimg.cc/hKRgj51f/24.png"
+      },
+
+      {
+        name: "25",
+        url: "https://i.postimg.cc/t9dbVNBn/25.png"
+      },
+
+      {
+        name: "26",
+        url: "https://i.postimg.cc/mT34FymF/26.png"
+      },
+
+      {
+        name: "27",
+        url: "https://i.postimg.cc/33jhDFtj/27.png"
+      },
+
+      {
+        name: "28",
+        url: "https://i.postimg.cc/2CdYB70H/28.png"
+      },
+
+      {
+        name: "29",
+        url: "https://i.postimg.cc/qkkTc6F5/29.png"
+      },
+
+      {
+        name: "30",
+        url: "https://i.postimg.cc/088sGK4F/30.png"
+      },
+
+      {
+        name: "31",
+        url: "https://i.postimg.cc/088sGK3g/31.png"
+      },
+
+      {
+        name: "32",
+        url: "https://i.postimg.cc/Pttjbvck/32.png"
+      },
+
+      {
+        name: "33",
+        url: "https://i.postimg.cc/bz3jmNcJ/33.png"
+      },
+
+      {
+        name: "34",
+        url: "https://i.postimg.cc/69YNM5Jv/34.png"
+      },
+
+      {
+        name: "35",
+        url: "https://i.postimg.cc/QX0rfxGp/35.png"
+      },
+
+      {
+        name: "36",
+        url: "https://i.postimg.cc/Q8CZwGhB/36.png"
+      },
+
+      {
+        name: "37",
+        url: "https://i.postimg.cc/2kyNMRrH/37.png"
+      },
+
+      {
+        name: "38",
+        url: "https://i.postimg.cc/Yr0BZKMs/38.png"
+      },
+
+      {
+        name: "39",
+        url: "https://i.postimg.cc/hDYRqytM/39.png"
+      },
+
+      {
+        name: "40",
+        url: "https://i.postimg.cc/zzQY1tGt/40.png"
+      },
+
+      {
+        name: "41",
+        url: "https://i.postimg.cc/rVH2Lnpw/41.png"
+      },
+
+      {
+        name: "42",
+        url: "https://i.postimg.cc/Q8zZr4Mt/42.png"
+      },
+
+      {
+        name: "43",
+        url: "https://i.postimg.cc/XW1bFJkc/43.png"
+      },
+
+      {
+        name: "44",
+        url: "https://i.postimg.cc/gdwPKWg1/44.png"
+      },
+
+      {
+        name: "45",
+        url: "https://i.postimg.cc/7DCyNkBk/45.png"
+      },
+
+      {
+        name: "46",
+        url: "https://i.postimg.cc/DFt3jMDw/46.png"
+      },
+
+      {
+        name: "47",
+        url: "https://i.postimg.cc/Jm9C62gh/47.png"
+      },
+
+      {
+        name: "48",
+        url: "https://i.postimg.cc/jtP0Gh0k/48.png"
+      },
+
+      {
+        name: "49",
+        url: "https://i.postimg.cc/JMZV9QV2/49.png"
+      },
+
+      {
+        name: "50",
+        url: "https://i.postimg.cc/mT4fRFTL/50.png"
+      },
+
+      {
+        name: "51",
+        url: "https://i.postimg.cc/dJFPvTJ0/51.png"
+      },
+
+      {
+        name: "52",
+        url: "https://i.postimg.cc/hK0FGPGT/52.png"
+      },
+
+      {
+        name: "53",
+        url: "https://i.postimg.cc/9cB3fFfK/53.png"
+      },
+
+      {
+        name: "54",
+        url: "https://i.postimg.cc/mbZv1fzf/54.png"
+      },
+
+      {
+        name: "55",
+        url: "https://i.postimg.cc/yV6M34gV/55.png"
+      },
+
+      {
+        name: "56",
+        url: "https://i.postimg.cc/7xPFJ8GY/56.png"
+      },
+
+      {
+        name: "57",
+        url: "https://i.postimg.cc/XV2TwHdp/57.png"
+      },
+
+      {
+        name: "58",
+        url: "https://i.postimg.cc/KZ9dnqBt/58.png"
+      },
+
+      {
+        name: "59",
+        url: "https://i.postimg.cc/zJd9ntKS/59.png"
+      },
+
+      {
+        name: "60",
+        url: "https://i.postimg.cc/yVfwFQcP/60.png"
+      },
+
+      {
+        name: "61",
+        url: "https://i.postimg.cc/WNCCyd5y/61.png"
+      },
+
+      {
+        name: "62",
+        url: "https://i.postimg.cc/GLVVf4Mw/62.png"
+      },
+
+      {
+        name: "63",
+        url: "https://i.postimg.cc/7HddR5B4/63.png"
+      },
+
+      {
+        name: "64",
+        url: "https://i.postimg.cc/PX997C6T/64.png"
+      }
+
+    ];
 
 
-<script>
+    /* ========================================= */
+    /* INDICE ACTUAL */
+    /* ========================================= */
 
-/* =========================================
-   LISTA DE IMAGENES
-   MAXIMA CALIDAD
-========================================= */
-
-const images = [
-
-    "https://i.postimg.cc/9WpcsYTr/01.png",
-    "https://i.postimg.cc/x0R9B3H8/02.png",
-    "https://i.postimg.cc/bzTq49bd/03.png",
-    "https://i.postimg.cc/TR9TBJmy/04.png",
-    "https://i.postimg.cc/7HtwZPmN/05.png",
-    "https://i.postimg.cc/L9Q284N0/06.png",
-    "https://i.postimg.cc/54Kb29nP/07.png",
-    "https://i.postimg.cc/qJD4vBjP/08.png",
-    "https://i.postimg.cc/Y7dp38Mn/09.png",
-    "https://i.postimg.cc/TxtR9QfF/10.png",
-    "https://i.postimg.cc/gpgYD4mf/11.png",
-    "https://i.postimg.cc/wzw6VF9K/12.png",
-    "https://i.postimg.cc/rcbq6mdz/13.png",
-    "https://i.postimg.cc/PhcdGxLP/14.png",
-    "https://i.postimg.cc/TGST8wy5/15.png",
-    "https://i.postimg.cc/2mJCp6qw/16.png",
-    "https://i.postimg.cc/PTwTdjZV/17.png",
-    "https://i.postimg.cc/5bCbfVvr/18.png",
-    "https://i.postimg.cc/GdydbCYN/19.png",
-    "https://i.postimg.cc/xnzn92MS/20.png",
-    "https://i.postimg.cc/8TgD50mV/21.png",
-    "https://i.postimg.cc/8TgD50mN/22.png",
-    "https://i.postimg.cc/gGbdJTHz/23.png",
-    "https://i.postimg.cc/hKRgj51f/24.png",
-    "https://i.postimg.cc/t9dbVNBn/25.png",
-    "https://i.postimg.cc/mT34FymF/26.png",
-    "https://i.postimg.cc/33jhDFtj/27.png",
-    "https://i.postimg.cc/2CdYB70H/28.png",
-    "https://i.postimg.cc/qkkTc6F5/29.png",
-    "https://i.postimg.cc/088sGK4F/30.png",
-    "https://i.postimg.cc/088sGK3g/31.png",
-    "https://i.postimg.cc/Pttjbvck/32.png",
-    "https://i.postimg.cc/bz3jmNcJ/33.png",
-    "https://i.postimg.cc/69YNM5Jv/34.png",
-    "https://i.postimg.cc/QX0rfxGp/35.png",
-    "https://i.postimg.cc/Q8CZwGhB/36.png",
-    "https://i.postimg.cc/2kyNMRrH/37.png",
-    "https://i.postimg.cc/Yr0BZKMs/38.png",
-    "https://i.postimg.cc/hDYRqytM/39.png",
-    "https://i.postimg.cc/zzQY1tGt/40.png",
-    "https://i.postimg.cc/rVH2Lnpw/41.png",
-    "https://i.postimg.cc/Q8zZr4Mt/42.png",
-    "https://i.postimg.cc/XW1bFJkc/43.png",
-    "https://i.postimg.cc/gdwPKWg1/44.png",
-    "https://i.postimg.cc/7DCyNkBk/45.png",
-    "https://i.postimg.cc/DFt3jMDw/46.png",
-    "https://i.postimg.cc/Jm9C62gh/47.png",
-    "https://i.postimg.cc/jtP0Gh0k/48.png",
-    "https://i.postimg.cc/JMZV9QV2/49.png",
-    "https://i.postimg.cc/mT4fRFTL/50.png",
-    "https://i.postimg.cc/dJFPvTJ0/51.png",
-    "https://i.postimg.cc/hK0FGPGT/52.png",
-    "https://i.postimg.cc/9cB3fFfK/53.png",
-    "https://i.postimg.cc/mbZv1fzf/54.png",
-    "https://i.postimg.cc/yV6M34gV/55.png",
-    "https://i.postimg.cc/7xPFJ8GY/56.png",
-    "https://i.postimg.cc/XV2TwHdp/57.png",
-    "https://i.postimg.cc/KZ9dnqBt/58.png",
-    "https://i.postimg.cc/zJd9ntKS/59.png",
-    "https://i.postimg.cc/yVfwFQcP/60.png",
-    "https://i.postimg.cc/WNCCyd5y/61.png",
-    "https://i.postimg.cc/GLVVf4Mw/62.png",
-    "https://i.postimg.cc/7HddR5B4/63.png",
-    "https://i.postimg.cc/PX997C6T/64.png"
-
-];
+    let currentIndex = 0;
 
 
-/* =========================================
-   VARIABLES
-========================================= */
+    /* ========================================= */
+    /* ELEMENTOS */
+    /* ========================================= */
 
-let currentIndex = 0;
-
-const mainImage =
-    document.getElementById("mainImage");
-
-const counter =
-    document.getElementById("counter");
-
-const thumbnailArea =
-    document.getElementById("thumbnailArea");
+    const mainImage =
+      document.getElementById(
+        "mainImage"
+      );
 
 
-/* =========================================
-   MOSTRAR IMAGEN
-========================================= */
-
-function showImage(index) {
-
-    currentIndex = index;
-
-    mainImage.src =
-        images[currentIndex];
-
-    mainImage.alt =
-        "Skin " +
-        String(currentIndex + 1).padStart(2, "0");
+    const counter =
+      document.getElementById(
+        "counter"
+      );
 
 
-    counter.textContent =
-        "SKIN " +
-        String(currentIndex + 1).padStart(2, "0") +
-        " / " +
-        images.length;
+    const previousButton =
+      document.getElementById(
+        "previousButton"
+      );
+
+
+    const nextButton =
+      document.getElementById(
+        "nextButton"
+      );
 
 
     const thumbnails =
-        document.querySelectorAll(".thumbnail");
+      document.getElementById(
+        "thumbnails"
+      );
 
 
-    thumbnails.forEach(function(item, i) {
+    /* ========================================= */
+    /* CREAR MINIATURAS */
+    /* ========================================= */
 
-        item.classList.toggle(
-            "active",
-            i === currentIndex
-        );
+    function createThumbnails() {
 
-    });
+      images.forEach(
+        function(image, index) {
+
+          const thumb =
+            document.createElement(
+              "div"
+            );
+
+          thumb.className =
+            "thumb";
+
+          thumb.dataset.index =
+            index;
 
 
-    const activeThumbnail =
-        document.querySelector(".thumbnail.active");
+          const imageElement =
+            document.createElement(
+              "img"
+            );
+
+          imageElement.src =
+            image.url;
+
+          imageElement.alt =
+            "Skin " +
+            image.name;
 
 
-    if (activeThumbnail) {
+          const number =
+            document.createElement(
+              "div"
+            );
 
-        activeThumbnail.scrollIntoView({
+          number.className =
+            "thumb-number";
 
-            behavior: "smooth",
+          number.textContent =
+            image.name;
 
-            block: "nearest",
 
-            inline: "center"
+          thumb.appendChild(
+            imageElement
+          );
 
-        });
+          thumb.appendChild(
+            number
+          );
+
+
+          thumb.addEventListener(
+            "click",
+            function() {
+
+              currentIndex =
+                index;
+
+              updateCarousel();
+
+            }
+          );
+
+
+          thumbnails.appendChild(
+            thumb
+          );
+
+        }
+      );
 
     }
 
-}
+
+    /* ========================================= */
+    /* OBTENER MINIATURAS */
+    /* ========================================= */
+
+    function getThumbs() {
+
+      return document.querySelectorAll(
+        ".thumb"
+      );
+
+    }
 
 
-/* =========================================
-   SIGUIENTE
-========================================= */
+    /* ========================================= */
+    /* ACTUALIZAR CARRUSEL */
+    /* ========================================= */
 
-function nextImage() {
+    function updateCarousel() {
 
-    currentIndex++;
+      if (
+        images.length === 0
+      ) {
+        return;
+      }
 
-    if (currentIndex >= images.length) {
+
+      const image =
+        images[currentIndex];
+
+
+      /* CAMBIAR IMAGEN */
+
+      mainImage.src =
+        image.url;
+
+
+      mainImage.alt =
+        "Skin " +
+        image.name;
+
+
+      /* ACTUALIZAR CONTADOR */
+
+      counter.textContent =
+        "SKIN " +
+
+        String(
+          currentIndex + 1
+        ).padStart(
+          2,
+          "0"
+        ) +
+
+        " / " +
+
+        images.length;
+
+
+      const thumbs =
+        getThumbs();
+
+
+      /* QUITAR SELECCION */
+
+      thumbs.forEach(
+        function(thumb) {
+
+          thumb.classList.remove(
+            "active"
+          );
+
+        }
+      );
+
+
+      /* ACTIVAR MINIATURA ACTUAL */
+
+      if (
+        thumbs[currentIndex]
+      ) {
+
+        thumbs[currentIndex]
+          .classList
+          .add(
+            "active"
+          );
+
+
+        /*
+         * Mantiene visible
+         * la skin activa.
+         */
+
+        thumbs[currentIndex]
+          .scrollIntoView({
+
+            behavior:
+              "smooth",
+
+            block:
+              "nearest",
+
+            inline:
+              "center"
+
+          });
+
+      }
+
+    }
+
+
+    /* ========================================= */
+    /* SIGUIENTE IMAGEN */
+    /* ========================================= */
+
+    function nextImage() {
+
+      currentIndex++;
+
+
+      if (
+        currentIndex >=
+        images.length
+      ) {
 
         currentIndex = 0;
 
+      }
+
+
+      updateCarousel();
+
     }
 
-    showImage(currentIndex);
 
-}
+    /* ========================================= */
+    /* IMAGEN ANTERIOR */
+    /* ========================================= */
+
+    function previousImage() {
+
+      currentIndex--;
 
 
-/* =========================================
-   ANTERIOR
-========================================= */
-
-function previousImage() {
-
-    currentIndex--;
-
-    if (currentIndex < 0) {
+      if (
+        currentIndex < 0
+      ) {
 
         currentIndex =
-            images.length - 1;
+          images.length - 1;
+
+      }
+
+
+      updateCarousel();
 
     }
 
-    showImage(currentIndex);
 
-}
+    /* ========================================= */
+    /* BOTON SIGUIENTE */
+    /* ========================================= */
 
+    nextButton.addEventListener(
+      "click",
+      function() {
 
-/* =========================================
-   CREAR MINIATURAS CON NUMERO
-========================================= */
+        nextImage();
 
-images.forEach(function(url, index) {
-
-    const container =
-        document.createElement("div");
-
-    container.className =
-        "thumbnail";
-
-
-    /* IMAGEN */
-
-    const image =
-        document.createElement("img");
-
-    image.src = url;
-
-    image.alt =
-        "Skin " +
-        String(index + 1).padStart(2, "0");
-
-    image.loading = "lazy";
-
-    image.draggable = false;
-
-
-    /* NUMERO */
-
-    const number =
-        document.createElement("div");
-
-    number.className =
-        "thumbnail-number";
-
-    number.textContent =
-        String(index + 1).padStart(2, "0");
-
-
-    /* AGREGAR ELEMENTOS */
-
-    container.appendChild(image);
-
-    container.appendChild(number);
-
-
-    /* CLICK EN MINIATURA */
-
-    container.addEventListener(
-        "click",
-        function() {
-
-            showImage(index);
-
-        }
+      }
     );
 
 
-    thumbnailArea.appendChild(container);
+    /* ========================================= */
+    /* BOTON ANTERIOR */
+    /* ========================================= */
 
-});
+    previousButton.addEventListener(
+      "click",
+      function() {
+
+        previousImage();
+
+      }
+    );
 
 
-/* =========================================
-   NAVEGACION CON TECLADO
-========================================= */
+    /* ========================================= */
+    /* DESLIZAR EN MOVIL */
+    /* ========================================= */
 
-document.addEventListener(
-    "keydown",
-    function(event) {
+    let startX = 0;
+    let startY = 0;
 
-        if (event.key === "ArrowRight") {
+
+    mainImage.addEventListener(
+      "touchstart",
+
+      function(event) {
+
+        startX =
+          event.touches[0]
+            .clientX;
+
+
+        startY =
+          event.touches[0]
+            .clientY;
+
+      },
+
+      {
+        passive: true
+      }
+
+    );
+
+
+    mainImage.addEventListener(
+      "touchend",
+
+      function(event) {
+
+        const endX =
+          event.changedTouches[0]
+            .clientX;
+
+
+        const endY =
+          event.changedTouches[0]
+            .clientY;
+
+
+        const differenceX =
+          startX - endX;
+
+
+        const differenceY =
+          startY - endY;
+
+
+        /*
+         * Solo cambiar si el gesto
+         * fue principalmente horizontal.
+         */
+
+        if (
+
+          Math.abs(
+            differenceX
+          )
+
+          >
+
+          Math.abs(
+            differenceY
+          )
+
+        ) {
+
+          /* DESLIZAR A LA IZQUIERDA */
+
+          if (
+            differenceX > 50
+          ) {
 
             nextImage();
 
-        }
+          }
 
-        if (event.key === "ArrowLeft") {
+
+          /* DESLIZAR A LA DERECHA */
+
+          else if (
+            differenceX < -50
+          ) {
 
             previousImage();
 
+          }
+
         }
 
-    }
-);
+      },
+
+      {
+        passive: true
+      }
+
+    );
 
 
-/* =========================================
-   BLOQUEAR CLICK DERECHO
-========================================= */
+    /* ========================================= */
+    /* TECLADO PARA PC */
+    /* ========================================= */
 
-document.addEventListener(
-    "contextmenu",
-    function(event) {
+    document.addEventListener(
+      "keydown",
 
-        event.preventDefault();
+      function(event) {
 
-    }
-);
+        if (
+          event.key ===
+          "ArrowRight"
+        ) {
+
+          nextImage();
+
+        }
 
 
-/* =========================================
-   INICIO
-========================================= */
+        if (
+          event.key ===
+          "ArrowLeft"
+        ) {
 
-showImage(0);
+          previousImage();
 
-</script>
+        }
+
+      }
+
+    );
+
+
+    /* ========================================= */
+    /* INICIAR */
+    /* ========================================= */
+
+    createThumbnails();
+
+    updateCarousel();
+
+  </script>
 
 </body>
 </html>
