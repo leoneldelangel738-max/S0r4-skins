@@ -1,1 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Galería de Ken</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;min-height:100%}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;text-align:center;overflow-x:hidden}
+.carousel{width:100%;margin:0 auto;padding:4px}
+#counter{font-size:18px;font-weight:bold;margin:4px 0 8px;color:#222}
+.viewer{width:100%;display:flex;justify-content:center;align-items:center}
+.main-image-container{width:100%;height:68vh;min-height:380px;max-height:680px;position:relative;display:flex;justify-content:center;align-items:center;overflow:hidden;background:#111;cursor:pointer;touch-action:pan-y}
+#mainImage{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:46px;height:70px;border:none;border-radius:8px;background:rgba(255,255,255,.10);color:white;font-size:58px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#previousButton{left:2px}#nextButton{right:2px}
+.arrow:active{transform:translateY(-50%) scale(.85);background:rgba(255,255,255,.25)}
+.thumbnails{width:100%;display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:8px 4px 12px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:thin;touch-action:pan-x}
+.thumb{min-width:70px;width:70px;padding:4px;background:#eee;border:2px solid transparent;border-radius:6px;cursor:pointer;flex-shrink:0}
+.thumb.active{border-color:#333;background:#fff}.thumb:active{transform:scale(.94)}
+.thumb img{width:100%;height:90px;object-fit:contain;display:block;pointer-events:none}
+.thumb-number{width:100%;font-size:12px;font-weight:bold;margin-top:4px;color:#222;pointer-events:none}
 
+.fullscreen-viewer{position:fixed;inset:0;width:100%;height:100dvh;background:#000;z-index:9999;display:none;justify-content:center;align-items:center;overflow:hidden;touch-action:none}
+.fullscreen-viewer.active{display:flex}
+#fullscreenImage{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none;transform-origin:center center;will-change:transform;pointer-events:none}
+.close-button{position:absolute;top:12px;right:12px;z-index:10020;width:48px;height:48px;border:none;border-radius:50%;background:rgba(0,0,0,.55);color:white;font-size:30px;cursor:pointer}
+.fullscreen-counter{position:absolute;top:18px;left:18px;z-index:10010;color:white;font-size:16px;font-weight:bold;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:20px}
+.fullscreen-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10010;width:55px;height:80px;border:none;border-radius:8px;background:rgba(255,255,255,.10);color:white;font-size:65px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#fullscreenPrevious{left:5px}#fullscreenNext{right:5px}
+
+@media(max-width:400px){.carousel{padding:2px}#counter{font-size:17px}.main-image-container{height:65vh;min-height:340px;max-height:620px}.arrow{width:42px;height:64px;font-size:52px}.thumb{min-width:64px;width:64px;padding:3px}.thumb img{height:82px}.thumb-number{font-size:11px}.fullscreen-arrow{width:45px;height:70px;font-size:52px}}
+@media(min-width:701px){.carousel{max-width:750px;padding:8px}.main-image-container{height:72vh;max-height:720px}.arrow{width:58px;height:80px;font-size:65px}#previousButton{left:10px}#nextButton{right:10px}}
+</style>
+</head>
+<body>
+<div class="carousel">
+<div id="counter">KEN 01 / 40</div>
+<div class="viewer"><div class="main-image-container" id="mainImageContainer">
+<img id="mainImage" src="" alt="Ken" draggable="false">
+<button type="button" class="arrow" id="previousButton">‹</button>
+<button type="button" class="arrow" id="nextButton">›</button>
+</div></div>
+<div class="thumbnails" id="thumbnails"></div>
+</div>
+
+<div class="fullscreen-viewer" id="fullscreenViewer">
+<div class="fullscreen-counter" id="fullscreenCounter">KEN 01 / 40</div>
+<button type="button" class="close-button" id="closeFullscreen">×</button>
+<button type="button" class="fullscreen-arrow" id="fullscreenPrevious">‹</button>
+<img id="fullscreenImage" src="" alt="Ken" draggable="false">
+<button type="button" class="fullscreen-arrow" id="fullscreenNext">›</button>
+</div>
+
+<script>
+const CHARACTER="Ken";
+const CHARACTER_UPPER="KEN";
+const images=[
+  ["01", "https://i.postimg.cc/9MTqTm1T/01.png"],
+  ["02", "https://i.postimg.cc/mDMFMLV9/02.png"],
+  ["03", "https://i.postimg.cc/V6MbMf4b/03.png"],
+  ["04", "https://i.postimg.cc/G2YsYLzT/04.png"],
+  ["05", "https://i.postimg.cc/pT8n8WkY/05.png"],
+  ["06", "https://i.postimg.cc/sXSZSjKc/06.png"],
+  ["07", "https://i.postimg.cc/hjx7xDMC/07.png"],
+  ["08", "https://i.postimg.cc/pT8n8Wkc/08.png"],
+  ["09", "https://i.postimg.cc/63RGRWzm/09.png"],
+  ["10", "https://i.postimg.cc/zBWRWzpM/10.png"],
+  ["11", "https://i.postimg.cc/nrJ9Gywk/11.png"],
+  ["12", "https://i.postimg.cc/3NT0FsbZ/12.png"],
+  ["13", "https://i.postimg.cc/SRhYfBtd/13.png"],
+  ["14", "https://i.postimg.cc/d3YZjbSn/14.png"],
+  ["15", "https://i.postimg.cc/rskRNBYf/15.png"],
+  ["16", "https://i.postimg.cc/1XQVrkYC/16.png"],
+  ["17", "https://i.postimg.cc/kGmRv0hY/17.png"],
+  ["18", "https://i.postimg.cc/0jsK0THh/18.png"],
+  ["19", "https://i.postimg.cc/Vv80WxH3/19.png"],
+  ["20", "https://i.postimg.cc/8cSfm20S/20.png"],
+  ["21", "https://i.postimg.cc/L5pg3cbS/21.png"],
+  ["22", "https://i.postimg.cc/5yVQShRx/22.png"],
+  ["23", "https://i.postimg.cc/Y0HLz5sq/23.png"],
+  ["24", "https://i.postimg.cc/nrJ9GyPL/24.png"],
+  ["25", "https://i.postimg.cc/d3jkH5bc/25.png"],
+  ["26", "https://i.postimg.cc/kGv61T0M/26.png"],
+  ["27", "https://i.postimg.cc/WzwFW5B1/27.png"],
+  ["28", "https://i.postimg.cc/sx4Q6TkM/28.png"],
+  ["29", "https://i.postimg.cc/Y0zGnd54/29.png"],
+  ["30", "https://i.postimg.cc/wMQyfwCs/30.png"],
+  ["31", "https://i.postimg.cc/1XrnCvkw/31.png"],
+  ["32", "https://i.postimg.cc/6qf2jMkC/32.png"],
+  ["33", "https://i.postimg.cc/VvWrGKxj/33.png"],
+  ["34", "https://i.postimg.cc/tJNZSBKt/34.png"],
+  ["35", "https://i.postimg.cc/3rXvxwdc/35.png"],
+  ["36", "https://i.postimg.cc/59BC2t6T/36.png"],
+  ["37", "https://i.postimg.cc/kMQbg5Bk/37.png"],
+  ["38", "https://i.postimg.cc/XNfCYvpR/38.png"],
+  ["39", "https://i.postimg.cc/dQ2yV0hw/39.png"],
+  ["40", "https://i.postimg.cc/tR3x4gsC/40.png"]
+].map(item=>({name:item[0],url:item[1]}));
+
+const mainImage=document.getElementById("mainImage");
+const mainImageContainer=document.getElementById("mainImageContainer");
+const counter=document.getElementById("counter");
+const previousButton=document.getElementById("previousButton");
+const nextButton=document.getElementById("nextButton");
+const thumbnails=document.getElementById("thumbnails");
+const fullscreenViewer=document.getElementById("fullscreenViewer");
+const fullscreenImage=document.getElementById("fullscreenImage");
+const fullscreenCounter=document.getElementById("fullscreenCounter");
+const closeFullscreen=document.getElementById("closeFullscreen");
+const fullscreenPrevious=document.getElementById("fullscreenPrevious");
+const fullscreenNext=document.getElementById("fullscreenNext");
+
+let currentIndex=0,scale=1,translateX=0,translateY=0;
+const minScale=1,maxScale=4;
+let startX=0,startY=0,startTranslateX=0,startTranslateY=0,initialDistance=0,initialScale=1,isDragging=false,isPinching=false;
+
+function updateCarousel(){
+ const image=images[currentIndex];
+ const number=String(currentIndex+1).padStart(2,"0");
+ mainImage.src=image.url; mainImage.alt=CHARACTER+" "+image.name;
+ fullscreenImage.src=image.url; fullscreenImage.alt=CHARACTER+" "+image.name;
+ counter.textContent=CHARACTER_UPPER+" "+number+" / "+images.length;
+ fullscreenCounter.textContent=CHARACTER_UPPER+" "+number+" / "+images.length;
+ const thumbs=document.querySelectorAll(".thumb");
+ thumbs.forEach(t=>t.classList.remove("active"));
+ if(thumbs[currentIndex]){
+  thumbs[currentIndex].classList.add("active");
+  thumbs[currentIndex].scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+ }
+}
+
+function createThumbnails(){
+ images.forEach((image,index)=>{
+  const thumb=document.createElement("div");thumb.className="thumb";
+  const img=document.createElement("img");img.src=image.url;img.alt=CHARACTER+" "+image.name;
+  const number=document.createElement("div");number.className="thumb-number";number.textContent=image.name;
+  thumb.append(img,number);
+  thumb.addEventListener("click",()=>{currentIndex=index;resetZoom();updateCarousel()});
+  thumbnails.appendChild(thumb);
+ });
+}
+
+function resetZoom(){scale=1;translateX=0;translateY=0;updateTransform(true)}
+function nextImage(){currentIndex=(currentIndex+1)%images.length;resetZoom();updateCarousel()}
+function previousImage(){currentIndex=(currentIndex-1+images.length)%images.length;resetZoom();updateCarousel()}
+function updateTransform(animate=false){
+ fullscreenImage.style.transition=animate?"transform .2s ease":"none";
+ fullscreenImage.style.transform=`translate(${translateX}px,${translateY}px) scale(${scale})`;
+}
+function limitPosition(){
+ if(scale<=1){translateX=0;translateY=0;return}
+ const cw=fullscreenViewer.clientWidth,ch=fullscreenViewer.clientHeight;
+ const sw=fullscreenImage.offsetWidth*scale,sh=fullscreenImage.offsetHeight*scale;
+ const maxX=Math.max(0,(sw-cw)/2),maxY=Math.max(0,(sh-ch)/2);
+ translateX=Math.max(-maxX,Math.min(maxX,translateX));
+ translateY=Math.max(-maxY,Math.min(maxY,translateY));
+}
+function getDistance(a,b){return Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY)}
+
+nextButton.addEventListener("click",e=>{e.stopPropagation();nextImage()});
+previousButton.addEventListener("click",e=>{e.stopPropagation();previousImage()});
+
+mainImageContainer.addEventListener("click",()=>{
+ fullscreenViewer.classList.add("active");
+ document.body.style.overflow="hidden";
+ resetZoom();updateCarousel();
+});
+
+closeFullscreen.addEventListener("click",e=>{
+ e.stopPropagation();
+ fullscreenViewer.classList.remove("active");
+ document.body.style.overflow="";
+ resetZoom();
+});
+fullscreenNext.addEventListener("click",e=>{e.stopPropagation();nextImage()});
+fullscreenPrevious.addEventListener("click",e=>{e.stopPropagation();previousImage()});
+
+fullscreenViewer.addEventListener("touchstart",e=>{
+ if(e.touches.length===2){
+  isPinching=true;isDragging=false;
+  initialDistance=getDistance(e.touches[0],e.touches[1]);initialScale=scale;return;
+ }
+ if(e.touches.length===1){
+  isDragging=true;isPinching=false;
+  startX=e.touches[0].clientX;startY=e.touches[0].clientY;
+  startTranslateX=translateX;startTranslateY=translateY;
+ }
+},{passive:false});
+
+fullscreenViewer.addEventListener("touchmove",e=>{
+ if(e.touches.length===2){
+  e.preventDefault();isPinching=true;isDragging=false;
+  scale=initialScale*(getDistance(e.touches[0],e.touches[1])/initialDistance);
+  scale=Math.max(minScale,Math.min(maxScale,scale));limitPosition();updateTransform();return;
+ }
+ if(e.touches.length===1&&isDragging&&scale>1){
+  e.preventDefault();
+  translateX=startTranslateX+e.touches[0].clientX-startX;
+  translateY=startTranslateY+e.touches[0].clientY-startY;
+  limitPosition();updateTransform();
+ }
+},{passive:false});
+
+fullscreenViewer.addEventListener("touchend",e=>{
+ if(e.changedTouches.length===1&&scale<=1.02&&!isPinching){
+  const dx=startX-e.changedTouches[0].clientX;
+  const dy=startY-e.changedTouches[0].clientY;
+  if(Math.abs(dx)>Math.abs(dy)&&dx>50)nextImage();
+  else if(Math.abs(dx)>Math.abs(dy)&&dx<-50)previousImage();
+ }
+ if(e.touches.length===0){
+  isDragging=false;isPinching=false;
+  if(scale<=1.02)resetZoom();else{limitPosition();updateTransform(true)}
+ }
+},{passive:true});
+
+fullscreenViewer.addEventListener("touchcancel",()=>{isDragging=false;isPinching=false});
+fullscreenViewer.addEventListener("wheel",e=>{
+ e.preventDefault();scale+=e.deltaY<0?.2:-.2;
+ scale=Math.max(minScale,Math.min(maxScale,scale));limitPosition();updateTransform();
+},{passive:false});
+fullscreenViewer.addEventListener("dblclick",()=>resetZoom());
+
+document.addEventListener("keydown",e=>{
+ if(!fullscreenViewer.classList.contains("active"))return;
+ if(e.key==="ArrowRight")nextImage();
+ if(e.key==="ArrowLeft")previousImage();
+ if(e.key==="Escape"){fullscreenViewer.classList.remove("active");document.body.style.overflow="";resetZoom()}
+});
+
+createThumbnails();updateCarousel();
+</script>
+</body>
+</html>
